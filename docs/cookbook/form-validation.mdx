@@ -1,0 +1,31 @@
+---
+title: Form validation
+---
+
+# Form validation
+
+In egui, validating a form needs no special machinery. Because the UI is rebuilt from your data every frame, validation is a plain function that looks at the current values.
+
+An empty form shows what is missing, and the button is disabled:
+
+<Screenshot name="cookbook_form_errors" />
+
+<Example name="cookbook_form" />
+
+## How it works
+
+**Validation is one function.** It returns a message for every problem. An empty list means everything is fine:
+
+<Example name="cookbook_form" item="fn errors" />
+
+**The UI calls it every frame.** The messages are shown in the theme's error color, and the submit button is enabled only when there are none:
+
+<Example name="cookbook_form" item="let errors" to="if ui.add_enabled(errors.is_empty()" />
+
+There is no "validate on change" event to wire up, and the messages can never be out of date: they are computed from the very values the fields show.
+
+## Variations
+
+- **Don't nag too early.** To hide the errors until the user has tried to submit, add a `tried_to_submit: bool` to the app, set it when the button is clicked, and only show the messages while it is true. Then leave the button enabled.
+- **Errors next to their field.** Return the problems per field instead of as one list, and show each right after its field in the grid.
+- **Submit with Enter.** See [Submitting with Enter](../widgets/text-edit.mdx#submitting-with-enter).

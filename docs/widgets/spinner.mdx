@@ -1,0 +1,23 @@
+---
+title: Spinner
+---
+
+# Spinner
+
+A spinner is a small rotating arc that says "working on it" when you can't say how long it will take.
+
+<Example name="widget_spinner" />
+
+## Options
+
+`ui.spinner()` adds one at the default size. For more control, use `egui::Spinner::new()`:
+
+| Method | What it does |
+|---|---|
+| `.size(40.0)` | The diameter in points |
+| `.color(color)` | The color of the arc |
+
+## Good to know
+
+- A visible spinner keeps the UI repainting so that it can spin. Remove it when the work is done, and the app goes back to sleeping between events.
+- When you know how much work is left, a [ProgressBar](./progress-bar.mdx) tells the user more.

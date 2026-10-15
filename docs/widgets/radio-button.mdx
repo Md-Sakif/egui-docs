@@ -1,0 +1,33 @@
+---
+title: RadioButton
+---
+
+# RadioButton
+
+Radio buttons let the user pick exactly one option from a small set.
+
+<Example name="widget_radio" />
+
+## The basics
+
+Radio buttons work best with an enum. Give it `PartialEq` so egui can compare values:
+
+<Example name="widget_radio" item="enum Size" />
+
+Then add one `radio_value` per option, all pointing at the same variable:
+
+<Example name="widget_radio" item="ui.radio_value(&mut self.size, Size::Small" to={'ui.label(format!("Selected'} />
+
+Each call does two things: it shows the button as selected while the variable equals that option, and it sets the variable to that option when clicked. That is all it takes to make the buttons exclusive.
+
+## Doing it by hand
+
+`ui.radio(selected, "text")` only draws a radio button in the state you pass, and reports clicks. Use it when the choice is not a simple "set this variable":
+
+<Example name="widget_radio" item="// `radio` only draws" />
+
+## Radio buttons, combo box or tabs?
+
+- Up to about five options that should all be visible: radio buttons.
+- Many options, or little space: a [ComboBox](./combo-box.mdx).
+- Options that switch what the page shows: [selectable labels](./selectable-label.mdx), which look like tabs.

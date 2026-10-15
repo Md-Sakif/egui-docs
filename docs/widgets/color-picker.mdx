@@ -1,0 +1,37 @@
+---
+title: Color picker
+---
+
+# Color picker
+
+egui has a built-in color picker. Most of the time you show it as a small colored button that opens the picker when clicked.
+
+<Example name="widget_color_picker" />
+
+## The color button
+
+Pick the method that matches how your app stores the color:
+
+| Call | Your variable |
+|---|---|
+| `ui.color_edit_button_srgba(&mut color)` | `egui::Color32`, egui's own color type |
+| `ui.color_edit_button_srgb(&mut rgb)` | `[u8; 3]`, red, green and blue from 0 to 255 |
+| `ui.color_edit_button_rgb(&mut rgb)` | `[f32; 3]`, red, green and blue from 0.0 to 1.0 |
+| `ui.color_edit_button_srgba_unmultiplied(&mut rgba)` | `[u8; 4]`, with transparency |
+| `ui.color_edit_button_rgba_unmultiplied(&mut rgba)` | `[f32; 4]`, with transparency |
+| `ui.color_edit_button_hsva(&mut hsva)` | `egui::ecolor::Hsva`, hue, saturation and value |
+
+Each returns a response, so `.changed()` tells you when the user picked a new color.
+
+## The picker itself
+
+To show the full picker all the time, without a button, call the function in `egui::widgets::color_picker`:
+
+<Example name="widget_color_picker" item="egui::widgets::color_picker::color_picker_color32" />
+
+The last argument decides whether the user can also choose transparency: `Alpha::Opaque` hides the transparency slider.
+
+## Good to know
+
+- `Color32::from_rgb(r, g, b)` creates a color from values between 0 and 255. There are also named colors such as `Color32::RED` and `Color32::WHITE`.
+- To only *show* a color, without editing, use `egui::widgets::color_picker::show_color(ui, color, size)`.

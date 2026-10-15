@@ -1,0 +1,30 @@
+---
+title: ProgressBar
+---
+
+# ProgressBar
+
+A progress bar shows how much of a task is done.
+
+<Example name="widget_progress_bar" />
+
+## The basics
+
+`egui::ProgressBar::new(progress)` takes a number from `0.0` (nothing done) to `1.0` (finished). The bar does not track anything itself: pass the current value every frame.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.show_percentage()` | Write the percentage on the bar |
+| `.text("...")` | Write your own text on the bar |
+| `.animate(true)` | Show a moving spinner on the bar, to signal ongoing work |
+| `.desired_width(160.0)` | The width. By default it fills the available width |
+| `.desired_height(6.0)` | The height |
+| `.fill(color)` | The color of the filled part |
+| `.corner_radius(4.0)` | How round the ends are |
+
+## Good to know
+
+- If the task runs on another thread, the UI has to be told when to redraw. See [Doing slow work in the background](../cookbook/background-thread.mdx) for a complete example with a progress bar.
+- When you can't tell how far along you are, use a [Spinner](./spinner.mdx) instead.

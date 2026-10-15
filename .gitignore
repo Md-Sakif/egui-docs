@@ -1,0 +1,11 @@
+# Docusaurus
+node_modules/
+build/
+.docusaurus/
+
+# Rust
+target/
+dist/
+
+# Written by scripts/screenshot-sizes.mjs before each build
+src/generated/

@@ -1,0 +1,29 @@
+---
+title: Separator
+---
+
+# Separator
+
+A separator is a thin line that divides groups of widgets.
+
+<Example name="widget_separator" />
+
+## The basics
+
+`ui.separator()` draws a line across the current layout. In a vertical layout that is a horizontal line, and inside `ui.horizontal` it becomes a vertical one.
+
+## Options
+
+Use `egui::Separator::default()` with `ui.add` to adjust it:
+
+| Method | What it does |
+|---|---|
+| `.spacing(24.0)` | The total room the separator takes up, line included |
+| `.shrink(60.0)` | Make the line shorter at both ends |
+| `.grow(10.0)` | Make the line longer at both ends |
+| `.horizontal()` / `.vertical()` | Force a direction instead of following the layout |
+
+## Good to know
+
+- For empty space without a line, use `ui.add_space(amount)`. See [Layout](../concepts/layout.mdx#spacing).
+- [Menus](../containers/menu.mdx) use separators to group their items.

@@ -1,0 +1,4 @@
+# The screenshot tests render with a software GPU. Creating many of those in
+# parallel can crash the driver, so run the tests one at a time.
+[env]
+RUST_TEST_THREADS = "1"

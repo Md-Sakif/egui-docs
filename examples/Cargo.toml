@@ -1,0 +1,21 @@
+[package]
+name = "egui-docs-examples"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+# "persistence" is only needed by the example that saves state between runs.
+eframe = { version = "0.36.2", features = ["persistence"] }
+serde = { version = "1", features = ["derive"] }
+# Only needed by the examples that show image files:
+egui_extras = { version = "0.36.2", features = ["image"] }
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[dev-dependencies]
+egui_kittest = { version = "0.36.2", features = ["wgpu", "snapshot", "eframe"] }
+
+# Every example is its own program that statically links egui and the GPU stack.
+# With debug info each one is about 400 MB; without it they are far smaller.
+[profile.dev]
+debug = false

@@ -1,0 +1,30 @@
+---
+title: Sides
+---
+
+# Sides
+
+`Sides` lays out one row with content on the left and content on the right, and a flexible gap in between. It is the easy answer to "put a button at the right end of this row".
+
+<Example name="container_sides" />
+
+## The basics
+
+`show` takes two closures: the first is laid out from the left edge going right, the second from the right edge going left.
+
+<Example name="container_sides" item="egui::Sides::new()" />
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.height(24.0)` | The height of the row |
+| `.spacing(8.0)` | The minimum gap between the two sides |
+| `.shrink_left()` | If space runs out, the left side gives way (its text is cut off) |
+| `.shrink_right()` | If space runs out, the right side gives way |
+| `.truncate()` / `.wrap()` | How text on the shrinking side is shortened |
+
+## Good to know
+
+- Widgets on the right side are added from right to left, so the first one you add ends up furthest right.
+- `Sides` is for a single row. For aligned columns across many rows, use a [Grid](./grid.mdx).

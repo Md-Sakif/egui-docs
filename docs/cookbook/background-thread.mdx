@@ -1,0 +1,38 @@
+---
+title: Slow work in the background
+---
+
+# Doing slow work in the background
+
+Your `ui` function has to return quickly, or the window freezes. Anything slow, such as reading a big file, a network request or a long calculation, belongs on another thread. The UI then only shows the progress.
+
+While the job runs:
+
+<Screenshot name="cookbook_background_thread_running" />
+
+<Example name="cookbook_background_thread" />
+
+## How it works
+
+There are three parts.
+
+**1. Start a thread and keep a channel to it.** A channel is a one-way pipe: the thread holds the sending end, your app keeps the receiving end.
+
+<Example name="cookbook_background_thread" item="let (sender, receiver)" to="self.percent = 0" />
+<Example name="cookbook_background_thread" item="std::thread::spawn" />
+
+**2. Wake up the UI from the thread.** egui only redraws when something happens, and a message arriving on a channel is not something it knows about. So after each message the thread calls `ctx.request_repaint()`. The `Context` is made to be cloned and used from other threads:
+
+<Example name="cookbook_background_thread" item="let ctx" />
+
+**3. Read the messages at the start of each frame.** `try_iter` takes whatever has arrived and returns immediately. It never waits:
+
+<Example name="cookbook_background_thread" item="if let Some(progress) = &self.progress" />
+
+## Good to know
+
+- **Never wait in `ui`.** Use `try_iter` or `try_recv` on the channel, not `recv`. Never call `join` on the thread from `ui`.
+- **The thread stops when the app closes.** When the app drops the receiver, `send` fails, and the example's thread returns.
+- **Send results the same way.** A channel can carry any type. A common pattern is an enum with a `Progress(f32)` and a `Finished(Result)` variant.
+- **Sharing instead of sending:** for state that both sides read and write, `Arc<Mutex<...>>` works too. Keep the lock short.
+- If you use an async runtime, the idea is the same: do the work in a task, and call `ctx.request_repaint()` when there is news.

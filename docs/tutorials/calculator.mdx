@@ -1,0 +1,111 @@
+---
+title: Calculator
+---
+
+# Tutorial: a calculator
+
+In this tutorial you build a working calculator in three steps: first the layout, then the logic, then some color. Along the way you meet the pieces you will use in every egui app: state, layouts, buttons and styling.
+
+This is what you will end up with:
+
+<Screenshot name="calc_3_styled" />
+
+It helps to have read [Your first app](../getting-started/first-app.mdx) first.
+
+## Step 1: lay out the keys
+
+Start a new project (`cargo new calculator`, then `cargo add eframe`) and put this in `src/main.rs`:
+
+<Example name="calc_1_layout" />
+
+Let's walk through the new parts.
+
+### The keys are data
+
+<Example name="calc_1_layout" item="const KEYS" />
+
+Instead of writing twenty lines that each add a button, the keys are a table: five rows of four labels. The UI code loops over it. When the UI is built from data like this, changing the layout later is a matter of editing the table.
+
+### The display
+
+<Example name="calc_1_layout" item="ui.with_layout" />
+
+`with_layout` changes how widgets are arranged inside its closure. `top_down(Align::RIGHT)` still stacks widgets from top to bottom, but lines them up against the right edge, which is where a calculator shows its number.
+
+`RichText` is how you style a piece of text. Here it makes the number 36 points tall. See [RichText](../widgets/rich-text.mdx).
+
+### The keypad
+
+<Example name="calc_1_layout" item="egui::Grid::new" />
+
+A [`Grid`](../containers/grid.mdx) puts widgets in rows and columns. Each widget you add goes into the next cell, and `ui.end_row()` starts a new row.
+
+`ui.add_sized` adds a widget with an exact size, so all keys are 56 by 44 points no matter how wide their label is.
+
+Run it. You have a calculator that looks right and does nothing.
+
+## Step 2: make it calculate
+
+The app needs to remember more than the text on the display. Replace the `Calculator` struct with this one:
+
+<Example name="calc_2_logic" item="struct Calculator" />
+
+Then give it a method that handles one key press:
+
+<Example name="calc_2_logic" item="fn press" />
+
+Notice that nothing in this function mentions the UI. It takes the label of a key and updates the state. That makes it easy to reason about, and easy to test.
+
+It uses three small helpers, plus a function that turns a number back into text:
+
+<Example name="calc_2_logic" item="fn value" />
+<Example name="calc_2_logic" item="fn set_value" />
+<Example name="calc_2_logic" item="fn calculate" />
+<Example name="calc_2_logic" item="fn format_number" />
+
+Finally, connect the buttons. The only change in `ui` is that the result of adding a button is now checked:
+
+<Example name="calc_2_logic" item="egui::Grid::new" />
+
+`ui.add_sized(...)` returns a response, just like `ui.button(...)` does, and `.clicked()` is true on the frame where the user clicked that key.
+
+Here is the complete program for this step:
+
+<Example name="calc_2_logic" />
+
+Run it and try `12 + 3 =`. Then keep going: press `× 2 =` to continue from the result.
+
+:::info How this step is tested
+The test for this example presses keys through the real UI and checks the display after each sequence, including `0.1 + 0.2` (which must show `0.3`), division by zero (which must show `Error`) and changing your mind about the operator halfway through.
+:::
+
+## Step 3: add some color
+
+The last step is cosmetic. Move the creation of a key button into its own function, which picks colors by the kind of key:
+
+<Example name="calc_3_styled" item="fn key_button" />
+
+- `fill` sets the background color of the button.
+- `corner_radius` rounds the corners. With a radius of half the height, the ends become half circles.
+- `RichText::color` sets the text color, so the labels stay readable on the colored backgrounds.
+
+Then use it in the grid:
+
+<Example name="calc_3_styled" item="egui::Grid::new" />
+
+The complete program:
+
+<Example name="calc_3_styled" />
+
+## What you learned
+
+- App state is a struct, and the logic is ordinary methods on it.
+- [`Grid`](../containers/grid.mdx) arranges widgets in rows and columns, and `add_sized` gives them a fixed size.
+- `with_layout` controls alignment. More in [Layout](../concepts/layout.mdx).
+- [`Button`](../widgets/button.mdx) and [`RichText`](../widgets/rich-text.mdx) have builder methods for color, size and shape.
+
+## Ideas to take it further
+
+- Let people type on the keyboard. The [Input](../concepts/input.mdx) page shows how to read key presses.
+- Add a history of past results in a [ScrollArea](../containers/scroll-area.mdx).
+- Publish it: see [Publishing for desktop](../publishing/desktop.mdx).

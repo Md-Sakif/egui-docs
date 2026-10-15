@@ -1,0 +1,52 @@
+---
+title: ScrollArea
+---
+
+# ScrollArea
+
+A scroll area lets content be bigger than the space it gets. The user scrolls with the mouse wheel, by dragging the scroll bar, or by touch.
+
+<Example name="container_scroll_area" />
+
+## The basics
+
+Pick a direction and put the content inside:
+
+<Example name="container_scroll_area" item="egui::ScrollArea::vertical()" />
+
+| Constructor | Scrolls |
+|---|---|
+| `ScrollArea::vertical()` | Up and down |
+| `ScrollArea::horizontal()` | Left and right |
+| `ScrollArea::both()` | Both directions |
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.max_height(200.0)`, `.max_width(w)` | The most space the scroll area will take |
+| `.auto_shrink(false)` | Always take the available space, even if the content is smaller |
+| `.stick_to_bottom(true)` | Stay at the bottom when content is added. For logs and chats |
+| `.stick_to_right(true)` | The same, horizontally |
+| `.scroll_bar_visibility(...)` | Always show, show when needed, or always hide the scroll bar |
+| `.id_salt("name")` | A name, needed when there are several scroll areas in one place |
+| `.vertical_scroll_offset(y)` | Jump to a position |
+| `.animated(false)` | Jump instead of gliding when scrolling from code |
+
+## Very long lists
+
+Adding a million labels every frame would be slow. `show_rows` asks you only for the rows that are currently visible:
+
+<Example name="container_scroll_area" item="let row_height" to="egui::ScrollArea::vertical()" />
+
+You tell it the height of one row and the total number of rows. It works out which rows are in view and passes you that range. This only works when all rows have the same height.
+
+## Scrolling from code
+
+Any widget's response has `scroll_to_me(align)`, which scrolls the surrounding scroll area until that widget is visible. Pass `Some(egui::Align::Center)` to center it, or `None` to scroll just far enough.
+
+## Good to know
+
+- **Several scroll areas need names.** Two scroll areas in the same parent would share one scroll position. Give each an `id_salt`, as the example does.
+- By default a scroll area shrinks to fit small content. Use `.auto_shrink(false)` when it should keep its size.
+- A scroll area takes as much room as its content wants, up to the space available. To keep a list short, limit it with `.max_height(...)`.

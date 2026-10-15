@@ -1,0 +1,36 @@
+---
+title: Grid
+---
+
+# Grid
+
+A grid lines widgets up in rows and columns. Each column is as wide as its widest cell, which makes grids perfect for forms and simple tables.
+
+<Example name="container_grid" />
+
+## The basics
+
+Give the grid a name, then add widgets. Each widget fills the next cell, and `ui.end_row()` moves on to the next row:
+
+<Example name="container_grid" item={'egui::Grid::new("profile_form")'} />
+
+The name is the grid's [ID](../concepts/ids.mdx). The grid uses it to remember column widths between frames.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.num_columns(2)` | How many columns there are. Lets the last column use the remaining width |
+| `.spacing([24.0, 8.0])` | The gap between columns and between rows |
+| `.striped(true)` | Shade every other row |
+| `.min_col_width(80.0)`, `.max_col_width(200.0)` | Limits on the column width |
+| `.min_row_height(24.0)` | The smallest height of a row |
+| `.with_row_color(...)` | Choose a background color per row |
+
+## Good to know
+
+- A cell holds exactly one widget. To put several things in a cell, wrap them: `ui.horizontal(|ui| { ... })` counts as one.
+- To skip a cell, add an empty label: `ui.label("")`.
+- Cells cannot span several columns. The [Calculator tutorial](../tutorials/calculator.mdx) works around this by giving every key the same size.
+- A grid measures its content over a frame or two, so the columns of a brand new grid may shift slightly at first.
+- For a scrolling table with a header row, see the [Table](../cookbook/table.mdx) recipe. For big tables with resizable columns and sorting, see `egui_extras` in [Companion crates](../companion-crates.mdx).

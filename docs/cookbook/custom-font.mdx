@@ -1,0 +1,45 @@
+---
+title: Using a custom font
+---
+
+# Using a custom font
+
+egui comes with its own fonts. To use another typeface, or to show characters the built-in fonts lack, bundle a `.ttf` or `.otf` file with your app.
+
+<Example name="cookbook_custom_font" />
+
+## How it works
+
+Fonts are installed once, in your app's `new` function:
+
+<Example name="cookbook_custom_font" item="fn new" />
+
+- **`include_bytes!`** embeds the font file in your executable. The path is relative to the source file.
+- **`FontData::from_static`** wraps those bytes.
+- **`FontInsert`** registers the font under a name of your choice, and says which family it joins and with what priority.
+
+## Families and priority
+
+egui has two font families, and every piece of text uses one of them:
+
+| Family | Used for |
+|---|---|
+| `FontFamily::Proportional` | Normal text: labels, buttons, headings |
+| `FontFamily::Monospace` | `ui.monospace`, `ui.code` and code editors |
+
+Each family is a *list* of fonts. To draw a character, egui uses the first font in the list that contains it.
+
+| Priority | Effect |
+|---|---|
+| `FontPriority::Highest` | Put the font first. It replaces the look of all text in that family |
+| `FontPriority::Lowest` | Put it last. It is only used for characters the other fonts don't have |
+
+So to change your app's typeface, use `Highest`, as the example does. To add support for another script or for extra symbols while keeping egui's look, use `Lowest`.
+
+To add the font to both families, put two entries in the list.
+
+## Good to know
+
+- The font file is compiled into your app, so check that its license allows redistribution. The Lato font used in this example is under the SIL Open Font License, which does.
+- To change sizes rather than the typeface, see [Text sizes](../concepts/styling.mdx#text-sizes).
+- `ctx.set_fonts(FontDefinitions)` replaces the whole font setup at once, if you want full control.

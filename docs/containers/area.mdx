@@ -1,0 +1,38 @@
+---
+title: Area
+---
+
+# Area
+
+An `Area` is the simplest floating container: a layer that sits above your panels at a position you choose. It draws nothing itself. No background, no border, no title bar.
+
+Use it for overlays: a notification badge, a floating toolbar, a heads-up display. A [Window](./window.mdx) is an `Area` with a frame and a title bar added.
+
+<Example name="container_area" />
+
+## The basics
+
+An area needs an [ID](../concepts/ids.mdx) and, like a window, is shown on the `Context`:
+
+<Example name="container_area" item={'egui::Area::new(egui::Id::new("badge"))'} />
+
+Because an area is invisible, you will nearly always put a [Frame](./frame.mdx) inside it. `Frame::popup` gives the standard look of a small floating panel, shadow included.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.anchor(align, offset)` | Pin it to a corner or edge of the screen |
+| `.default_pos([x, y])` | Where it first appears. The user can drag it from there |
+| `.fixed_pos([x, y])` | A position that cannot change |
+| `.default_size([w, h])` | How much room to plan for on the first frame |
+| `.movable(false)` | Cannot be dragged |
+| `.interactable(false)` | Ignores the mouse entirely, so clicks reach what is underneath |
+| `.order(order)` | Which layer it is on, for example `egui::Order::Foreground` |
+| `.constrain(false)` | Allow it to leave the screen |
+
+## Good to know
+
+- An area is as large as its content.
+- Like windows, areas remember where they were dragged, and `default_pos` only applies the first time. The note about `default_size` on the [Window](./window.mdx#good-to-know) page applies here too.
+- For something that should appear next to a widget, use a [Popup](./popup.mdx) or [Tooltip](./tooltip.mdx), which position themselves.

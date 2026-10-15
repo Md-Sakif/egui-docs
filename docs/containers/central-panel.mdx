@@ -1,0 +1,30 @@
+---
+title: CentralPanel
+---
+
+# CentralPanel
+
+The central panel is the main area of your app. It fills whatever space is left after all other [panels](./panel.mdx) have taken theirs, and gives it the standard background color and a margin.
+
+Almost every example in these docs starts with one.
+
+<Example name="container_central_panel" />
+
+## Why you need it
+
+The `ui` that eframe hands to your app covers the whole window but has no background and no margin. Widgets added to it directly sit against the edge of the window, on top of a plain dark backdrop. Wrapping your content in a `CentralPanel` fixes both.
+
+## Options
+
+| Call | What it does |
+|---|---|
+| `CentralPanel::default()` | The standard panel: background color and a small margin |
+| `CentralPanel::no_frame()` | No background and no margin. For content that draws edge to edge |
+| `.frame(frame)` | Your own [Frame](./frame.mdx): a different margin, color or border |
+
+To tweak the standard look instead of replacing it, start from `egui::Frame::central_panel(ui.style())`, as the example does.
+
+## Good to know
+
+- **Add it last.** Panels claim space in the order you add them, and the central panel takes what remains. Side, top and bottom panels must come first.
+- Use one central panel per window.

@@ -1,0 +1,36 @@
+---
+title: CollapsingHeader
+---
+
+# CollapsingHeader
+
+A collapsing header is a title with a small arrow. Clicking it shows or hides the content below. Use it to keep long settings pages tidy, and nest it to build tree views.
+
+<Example name="container_collapsing" />
+
+## The basics
+
+`ui.collapsing("title", |ui| ...)` is the short form. The section starts closed, and egui remembers whether the user opened it.
+
+For more options use the builder:
+
+<Example name="container_collapsing" item={'egui::CollapsingHeader::new("Open by default")'} />
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.default_open(true)` | Start open instead of closed |
+| `.open(Some(true))` | Force it open (or closed with `Some(false)`) from code. `None` leaves the user in control |
+| `.id_salt("name")` | A separate identity, for headers that share a title |
+| `.enabled(false)` | Greyed out and cannot be opened |
+| `.show_background(true)` | Draw a background behind the header |
+| `.icon(...)` | Paint your own icon instead of the arrow |
+
+`show_unindented` is like `show` but does not indent the content.
+
+## Good to know
+
+- **Same title, same state.** Two headers with the same title in the same place open and close together, because they share an [ID](../concepts/ids.mdx). In a loop, use `ui.push_id` or `.id_salt(...)`. The [IDs](../concepts/ids.mdx) page has an example of exactly this.
+- The closure only runs while the section is open, so content in closed sections costs nothing.
+- `show` returns a `CollapsingResponse`. Its `header_response` is the response of the title, useful for a context menu, and `fully_open()` tells you whether the section is completely open.

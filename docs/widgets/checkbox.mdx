@@ -1,0 +1,37 @@
+---
+title: Checkbox
+---
+
+# Checkbox
+
+A checkbox turns one option on or off. It edits a `bool` that belongs to you.
+
+<Example name="widget_checkbox" />
+
+## The basics
+
+`ui.checkbox(&mut value, "text")` shows the box ticked when `value` is true, and flips `value` when the user clicks it. There is nothing to read back afterwards: your variable *is* the state of the checkbox.
+
+To do something at the moment it changes, check the response. This is how the [Window options](../getting-started/window-options.mdx) example switches to fullscreen:
+
+<Example name="window_options" item={'if ui.checkbox(&mut self.fullscreen, "Fullscreen")'} />
+
+## Options
+
+Build it with `egui::Checkbox::new(&mut value, "text")` for these:
+
+| Method | What it does |
+|---|---|
+| `.indeterminate(true)` | Show a dash instead of a tick: "some, but not all" |
+| `Checkbox::without_text(&mut value)` | Just the box, when the label lives somewhere else |
+
+## A "select all" checkbox
+
+The example's "All fruit" checkbox shows the usual pattern. Its value is computed from the others every frame, and a click sets them all:
+
+<Example name="widget_checkbox" item={'// A "select all"'} to={'ui.indent("fruit"'} />
+
+## Good to know
+
+- Clicking the text toggles the checkbox as well, so the click target is comfortably large.
+- For a switch-style control, see [Your own widget](./custom-widget.mdx), which builds one.

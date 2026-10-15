@@ -1,0 +1,34 @@
+---
+title: Tooltip
+---
+
+# Tooltip
+
+A tooltip is a hint that appears when the pointer rests on a widget.
+
+<Example name="container_tooltip" shot="container_tooltip_text" />
+
+A tooltip can hold more than text:
+
+<Screenshot name="container_tooltip" />
+
+## The basics
+
+Tooltips are added to a widget's [response](../concepts/responses.mdx). The methods return the response again, so you can keep chaining or put the whole thing in an `if`.
+
+| Method | What it shows |
+|---|---|
+| `.on_hover_text("...")` | A text tooltip |
+| `.on_hover_ui(\|ui\| ...)` | A tooltip with any content: headings, images, several lines |
+| `.on_hover_text_at_pointer("...")` | A text tooltip that follows the mouse pointer |
+| `.on_hover_ui_at_pointer(\|ui\| ...)` | The same, with any content |
+| `.on_disabled_hover_text("...")` | A text tooltip that appears only while the widget is disabled |
+| `.on_disabled_hover_ui(\|ui\| ...)` | The same, with any content |
+
+Normal tooltips do not appear on disabled widgets, so use the `on_disabled_` variants to explain why something cannot be used. See [Disabling and hiding](../widgets/enabled-visible.mdx).
+
+## Good to know
+
+- Tooltips appear after the pointer has been still for a moment. The timing is part of the [style](../concepts/styling.mdx), under `interaction`: `tooltip_delay` and `show_tooltips_only_when_still`.
+- Tooltips work on any widget, including labels, images and [your own widgets](../widgets/custom-widget.mdx).
+- Keep tooltips short. If the hint needs a paragraph, it probably belongs in the UI itself.

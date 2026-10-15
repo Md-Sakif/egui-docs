@@ -1,0 +1,31 @@
+---
+title: Resize
+---
+
+# Resize
+
+`Resize` is a region with a handle in its bottom right corner that the user can drag to change its size. [Windows](./window.mdx) use it internally. Use it yourself for things like a resizable preview or text box.
+
+<Example name="container_resize" />
+
+## The basics
+
+`Resize` draws only the handle, so the example wraps it in a [Frame](./frame.mdx) to make the edges visible:
+
+<Example name="container_resize" item="egui::Frame::group" />
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.default_size([w, h])`, `.default_width(w)`, `.default_height(h)` | The starting size |
+| `.min_size([w, h])`, `.max_size([w, h])` | How small and how large it may get |
+| `.resizable([true, false])` | Allow resizing per direction: here only the width |
+| `.fixed_size([w, h])` | A size that cannot be changed |
+| `.auto_sized()` | Always fit the content |
+| `.id_salt("name")` | A name, needed when there are several in one place |
+
+## Good to know
+
+- The size is remembered between frames, and between runs if you [save state](../cookbook/persistence.mdx).
+- To let users resize a sidebar or toolbar, you don't need this: [panels](./panel.mdx) have `.resizable(true)`.

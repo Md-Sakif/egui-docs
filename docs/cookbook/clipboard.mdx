@@ -1,0 +1,28 @@
+---
+title: Clipboard
+---
+
+# Copying to the clipboard
+
+A "Copy" button takes one line.
+
+<Example name="cookbook_clipboard" />
+
+## How it works
+
+`ctx.copy_text` puts a string on the system clipboard:
+
+<Example name="cookbook_clipboard" item={'if ui.button("Copy")'} />
+
+## What you get for free
+
+You often don't need a button at all:
+
+- **Labels** can be selected with the mouse and copied with Ctrl+C.
+- **Text fields** support copy, cut and paste with the usual shortcuts.
+
+## Good to know
+
+- `ctx.copy_image(color_image)` copies a picture instead of text.
+- Pasted text arrives as an input event, `egui::Event::Paste`. Text fields handle it themselves. To react to a paste elsewhere, look through `ui.input(|i| i.events.clone())` for it.
+- Give feedback after copying, as the example does. Nothing visible happens otherwise, and people will click again.

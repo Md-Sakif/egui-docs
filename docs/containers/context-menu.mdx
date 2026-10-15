@@ -1,0 +1,33 @@
+---
+title: Context menu
+---
+
+# Context menu
+
+A context menu opens where the user right-clicks. Any widget can have one.
+
+<Example name="container_context_menu" />
+
+## The basics
+
+Call `context_menu` on the [response](../concepts/responses.mdx) of the widget that should have the menu. The closure builds the menu, exactly like the inside of a [menu button](./menu.mdx):
+
+<Example name="container_context_menu" item="response.context_menu" />
+
+Buttons are the items, `ui.separator()` groups them, and `ui.menu_button` adds a sub-menu. Clicking an item closes the menu.
+
+## A context menu for an area
+
+To give a whole region a context menu, use the response of its container. Layout functions and containers return an `InnerResponse`, and its `response` field covers the whole region:
+
+- `ui.horizontal(...).response.context_menu(...)`
+- `ui.group(...).response.context_menu(...)`
+
+For an empty region, such as the background of a canvas, allocate it with `ui.allocate_response(size, egui::Sense::click())` and attach the menu to that.
+
+## Good to know
+
+- The widget must react to clicks. Buttons do. A label does not, until you give it `.sense(egui::Sense::click())`. See [Responses](../concepts/responses.mdx#making-other-widgets-clickable).
+- On touch screens, a long press opens the context menu.
+- `response.context_menu_opened()` tells you whether the menu is open right now, for example to keep a row highlighted while its menu is showing.
+- `response.secondary_clicked()` is true on the frame of the right-click, if you want to do something other than open a menu.

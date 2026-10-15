@@ -1,0 +1,74 @@
+---
+title: Styling
+---
+
+# Styling and themes
+
+egui's look is controlled at four levels, from broad to narrow:
+
+1. **The theme**: dark or light.
+2. **The style**: colors, rounding, spacing and fonts for the whole app.
+3. **A scope**: a different style for one part of the UI.
+4. **One widget**: a color or size for a single button or label.
+
+## Dark and light theme
+
+egui ships with a dark and a light theme and follows the operating system's setting by default.
+
+<Example name="style_theme" />
+
+| Call | Effect |
+|---|---|
+| `ctx.set_theme(egui::Theme::Dark)` | Always dark |
+| `ctx.set_theme(egui::Theme::Light)` | Always light |
+| `ctx.set_theme(egui::ThemePreference::System)` | Follow the operating system (the default) |
+| `ctx.theme()` | Which theme is active right now |
+| `egui::widgets::global_theme_preference_buttons(ui)` | A ready-made System / Dark / Light switch |
+| `egui::widgets::global_theme_preference_switch(ui)` | A ready-made single toggle button |
+
+## Customizing the whole app
+
+The `Style` holds everything about how widgets look. Change it once at startup and every widget follows:
+
+<Example name="style_visuals" />
+
+`all_styles_mut` applies your changes to both the dark and the light style, which is what you want for things like rounding and spacing. To change only one of them, use `ctx.style_mut_of(egui::Theme::Dark, |style| ...)`.
+
+A style has three main parts:
+
+| Part | Controls | Some useful fields |
+|---|---|---|
+| `style.visuals` | Colors and shapes | `selection.bg_fill`, `hyperlink_color`, `panel_fill`, `window_fill`, `window_corner_radius`, `override_text_color` |
+| `style.visuals.widgets` | How widgets look in each state | `noninteractive`, `inactive`, `hovered`, `active`, `open`. Each has `bg_fill`, `bg_stroke`, `fg_stroke`, `corner_radius` |
+| `style.spacing` | Sizes and gaps | `item_spacing`, `button_padding`, `indent`, `interact_size`, `slider_width`, `combo_width` |
+| `style.text_styles` | The font and size for each kind of text | See below |
+
+:::tip Explore before you code
+`ctx.style_ui(ui, theme)` draws egui's built-in style editor. Put it in a window while you develop, play with the settings until the app looks right, then copy the values into your code.
+:::
+
+## Text sizes
+
+All text uses one of five named **text styles**: `Heading`, `Body`, `Button`, `Monospace` and `Small`. To make all text bigger or smaller, change the font assigned to each:
+
+<Example name="style_text" />
+
+To use a different typeface altogether, see [Using a custom font](../cookbook/custom-font.mdx).
+
+## Styling one part of the UI
+
+Every `Ui` has its own copy of the style, which you can change with `ui.style_mut()`, `ui.visuals_mut()` and `ui.spacing_mut()`. The change applies to everything added afterwards in that `Ui`. Wrap it in `ui.scope` to limit how far it reaches:
+
+<Example name="style_scope" />
+
+## Styling one widget
+
+For a one-off, style the widget itself:
+
+- Text: [`RichText`](../widgets/rich-text.mdx) sets size, color, weight and more.
+- Buttons: [`Button`](../widgets/button.mdx) has `fill`, `stroke` and `corner_radius`.
+- Boxes: [`Frame`](../containers/frame.mdx) draws backgrounds and borders around anything.
+
+:::warning Hard-coded colors and themes
+A color you pick by hand looks the same in both themes. Dark grey text is fine on the light theme and unreadable on the dark one. When you can, take colors from the current style, for example `ui.visuals().text_color()` or `ui.visuals().error_fg_color`, so they adapt.
+:::

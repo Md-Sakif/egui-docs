@@ -1,0 +1,29 @@
+---
+title: Tabs
+---
+
+# Tabs
+
+egui has no dedicated tab widget, because tabs are easy to build from two things you already know: a row of [selectable labels](../widgets/selectable-label.mdx) and a `match`.
+
+<Example name="cookbook_tabs" />
+
+## How it works
+
+**An enum says which tab is open.** One variant per tab, stored in your app:
+
+<Example name="cookbook_tabs" item="enum Tab" />
+
+**The tab bar edits it.** Each `selectable_value` is highlighted while its tab is the current one, and makes it current when clicked:
+
+<Example name="cookbook_tabs" item={'egui::Panel::top("tabs")'} />
+
+**The page reads it.** Only the code for the selected tab runs, so only that tab is drawn:
+
+<Example name="cookbook_tabs" item="egui::CentralPanel::default()" />
+
+## Variations
+
+- **State per tab** simply lives in your app struct, like `notifications` here. It is kept while another tab is showing, because your struct does not go anywhere.
+- **Vertical tabs:** put the `selectable_value` calls in a `Panel::left` instead, without the `ui.horizontal`.
+- **Tabs that can be dragged, split and docked** are a much bigger job. The `egui_dock` and `egui_tiles` crates do it for you. See [Companion crates](../companion-crates.mdx).

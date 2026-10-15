@@ -1,0 +1,34 @@
+---
+title: Dropping files
+---
+
+# Dropping files onto the window
+
+Users can drag files from their file manager onto your app's window. egui tells you which files are hovering and which were dropped.
+
+<Example name="cookbook_file_drop" />
+
+## How it works
+
+**Dropped files** arrive in the input on the frame the user lets go. They are there for one frame only, so collect them right away:
+
+<Example name="cookbook_file_drop" item="let new_files" />
+<Example name="cookbook_file_drop" item="for file in new_files" />
+
+Each dropped file has two things you can ask it:
+
+| Method | Gives you |
+|---|---|
+| `file.path()` | On the desktop, the full path. In a web app, only the file name, because browsers keep the real location private |
+| `file.bytes()` | The contents of the file, on the desktop |
+
+**Hovering files** let you react before the drop, for instance by showing a "drop here" message:
+
+<Example name="cookbook_file_drop" item="let hovering" />
+
+## Good to know
+
+- On the desktop you often only need the path: remember it, and open the file with `std::fs` when you need it.
+- `file.bytes()` reads the whole file. For large files, do that on a [background thread](./background-thread.mdx).
+- In a web app, reading is asynchronous. The method there is `bytes_async()`.
+- To let the user *pick* a file with the system's file dialog instead, use the `rfd` crate. See [Companion crates](../companion-crates.mdx).

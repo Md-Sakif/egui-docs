@@ -1,0 +1,88 @@
+---
+title: Layout
+---
+
+# Layout
+
+egui has no layout files and no constraint solver. Widgets are placed one after another, in the order your code adds them, and containers decide the direction.
+
+## Vertical and horizontal
+
+By default a `Ui` stacks widgets from top to bottom. `ui.horizontal` creates a row inside it, and `ui.vertical` creates a column inside a row. You can nest them as deep as you like.
+
+<Example name="layout_basic" />
+
+:::note Why `let _ =` in front of some buttons?
+A button that nobody listens to is usually a mistake, so the compiler warns when you ignore what `ui.button` returns. These placeholder buttons really are just for show, and `let _ =` says so.
+:::
+
+## Alignment
+
+To center things, push them to the right, wrap them, or fill from the bottom, pick a different layout:
+
+<Example name="layout_align" />
+
+| Call | Result |
+|---|---|
+| `ui.vertical_centered(...)` | A column with every widget centered horizontally |
+| `ui.vertical_centered_justified(...)` | The same, with every widget stretched to the full width |
+| `ui.horizontal_wrapped(...)` | A row that continues on the next line when it is full |
+| `ui.horizontal_centered(...)` | A row with widgets centered vertically |
+| `ui.with_layout(layout, ...)` | Any `egui::Layout` you build yourself |
+| `ui.centered_and_justified(...)` | One widget that fills all the available space |
+
+The layouts you can pass to `with_layout` are `Layout::left_to_right(align)`, `right_to_left(align)`, `top_down(align)` and `bottom_up(align)`.
+
+:::tip Right-aligned widgets come out in reverse
+In a `right_to_left` layout the first widget you add is the one furthest to the right. In the example above "Right" is added first and "Also right" second.
+:::
+
+:::warning `with_layout` takes all the space it can get
+Used directly inside a vertical layout, `with_layout(Layout::right_to_left(...))` claims the rest of the window's height. Put it inside `ui.horizontal`, as in the example, so that it is limited to one row.
+:::
+
+## Columns
+
+`ui.columns` splits the available width into equal parts and hands you one `Ui` for each:
+
+<Example name="layout_columns" />
+
+For columns that size themselves to their content, like a form or a table, use a [`Grid`](../containers/grid.mdx) instead.
+
+## Spacing
+
+egui puts a little space between widgets on its own. You can add more, draw a line, indent a block, or change the default gap:
+
+<Example name="layout_spacing" />
+
+| Call | Result |
+|---|---|
+| `ui.add_space(20.0)` | An empty gap in the direction of the layout |
+| `ui.separator()` | A dividing line. See [Separator](../widgets/separator.mdx) |
+| `ui.indent(id, ...)` | An indented block with a guide line |
+| `ui.spacing_mut().item_spacing = ...` | The gap between all widgets that follow, horizontal and vertical |
+
+`ui.scope` keeps a change like that local: when the scope ends, the old spacing is back. More about scopes in [Styling](./styling.mdx).
+
+## Sizing
+
+Widgets are as big as their content needs. When you want something else:
+
+<Example name="layout_sizing" />
+
+| Call | Result |
+|---|---|
+| `ui.add_sized([w, h], widget)` | The widget gets exactly this size |
+| `ui.available_width()` | How much room is left in this row. Useful as the width for `add_sized` |
+| `Button::new(...).min_size(vec2)` | A lower limit. The widget still grows for longer text |
+| `TextEdit::...desired_width(f32::INFINITY)` | A text field as wide as the space allows |
+| `ui.set_min_width(w)`, `ui.set_max_width(w)` | Limit the size of the current `Ui` itself |
+
+## Bigger building blocks
+
+The functions on this page arrange widgets inside a region. To divide up the whole window, use containers:
+
+- [Panels](../containers/panel.mdx) for sidebars, toolbars and status bars
+- [ScrollArea](../containers/scroll-area.mdx) when content is bigger than the space
+- [Grid](../containers/grid.mdx) for forms and tables
+- [Sides](../containers/sides.mdx) for "something on the left, something on the right"

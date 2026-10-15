@@ -1,0 +1,61 @@
+---
+title: Panel
+---
+
+# Panel
+
+A panel is a strip along one edge of the window: a toolbar at the top, a status bar at the bottom, a sidebar on the left or right.
+
+<Example name="container_panel" shot="container_panel_open" />
+
+Click the "Sidebar" button and the left panel slides away:
+
+<Screenshot name="container_panel" />
+
+## The basics
+
+Create a panel for an edge, give it a name, and show it:
+
+<Example name="container_panel" item={'egui::Panel::bottom("status_bar")'} />
+
+| Constructor | Where it goes |
+|---|---|
+| `Panel::top("name")` | Along the top, full width |
+| `Panel::bottom("name")` | Along the bottom, full width |
+| `Panel::left("name")` | Along the left edge |
+| `Panel::right("name")` | Along the right edge |
+
+The name is the panel's [ID](../concepts/ids.mdx). It must be different for every panel.
+
+## Order matters
+
+Panels claim their space in the order you add them. Each one takes its strip from what the earlier ones left over.
+
+In the example the top and bottom panels come first, so they span the full width, and the sidebars fit in between them. Add the side panels first and they would run the full height instead, with the top bar squeezed between them.
+
+The [CentralPanel](./central-panel.mdx) always comes last.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.resizable(true)` | Let the user drag the inner edge to resize the panel |
+| `.default_size(120.0)` | The starting width (side panels) or height (top and bottom panels) |
+| `.min_size(80.0)`, `.max_size(200.0)` | Limits for resizing |
+| `.size_range(80.0..=200.0)` | Both limits at once |
+| `.exact_size(110.0)` | A fixed size |
+| `.show_separator_line(false)` | Hide the line between the panel and its neighbor |
+| `.frame(frame)` | A custom [Frame](./frame.mdx) |
+
+## Collapsible panels
+
+Replace `show` with `show_collapsible` and pass a `bool`. The panel is visible while the bool is true, and slides in and out when it changes:
+
+<Example name="container_panel" item={'egui::Panel::left("sidebar")'} />
+
+The example flips that bool with a `toggle_value` button in the top bar.
+
+## Good to know
+
+- Panels can also be nested: show a panel inside the `Ui` of another container, and it attaches to the edge of that container instead of the window.
+- A resizable panel remembers its size. To forget a size during development, change the panel's name.

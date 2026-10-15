@@ -1,0 +1,50 @@
+---
+title: Window
+---
+
+# Window
+
+An `egui::Window` is a floating window *inside* your app. It can be dragged by its title bar, collapsed, resized and closed. It is not a separate window of the operating system. For that, see [Multiple windows](../cookbook/multiple-windows.mdx).
+
+<Example name="container_window" />
+
+## The basics
+
+A window is shown on the `Context` rather than inside a particular `Ui`, because it floats above everything:
+
+<Example name="container_window" item={'egui::Window::new("Settings")'} />
+
+The title is also the window's [ID](../concepts/ids.mdx), so every window needs a different title, or an explicit `.id(...)`.
+
+## Opening and closing
+
+`.open(&mut bool)` connects the window to a `bool` in your app:
+
+- While the bool is `false`, the window is not shown.
+- The window gets a close button, and clicking it sets the bool to `false`.
+
+To open the window, set the bool to `true`, as the "Open settings" button does.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.open(&mut bool)` | Show or hide the window, and add a close button |
+| `.default_pos([x, y])` | Where the window first appears |
+| `.default_size([w, h])`, `.default_width(w)`, `.default_height(h)` | Its first size |
+| `.fixed_pos([x, y])`, `.fixed_size([w, h])` | A position or size the user cannot change |
+| `.anchor(align, offset)` | Pin the window to a corner or edge of the screen |
+| `.resizable(false)` | No resize handles |
+| `.collapsible(false)` | No collapse arrow in the title bar |
+| `.movable(false)` | Cannot be dragged |
+| `.title_bar(false)` | No title bar at all |
+| `.min_width(w)`, `.max_width(w)`, `.min_height(h)`, `.max_height(h)` | Size limits |
+| `.vscroll(true)`, `.hscroll(true)` | Scroll the content when it does not fit |
+| `.auto_sized()` | Always exactly as big as the content |
+| `.frame(frame)` | A custom [Frame](./frame.mdx) |
+
+## Good to know
+
+- **Positions are remembered.** egui stores where the user dragged each window. `default_pos` only applies the very first time a window is shown.
+- **Give floating windows a `default_size` in small apps.** Before a window has been shown, egui plans for a generous default size. If a window that large does not fit at `default_pos`, egui moves it up and to the left so that it would. A realistic `default_size` avoids the surprise, as in the example.
+- For a dialog that the user must answer before continuing, use a [Modal](./modal.mdx).

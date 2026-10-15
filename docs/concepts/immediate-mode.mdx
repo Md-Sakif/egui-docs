@@ -1,0 +1,43 @@
+---
+title: Immediate mode
+---
+
+# Immediate mode
+
+egui is an **immediate mode** GUI library. That one idea explains most of how egui code looks, so it is worth five minutes.
+
+## The idea
+
+In most GUI toolkits you *create* widgets once, keep them around, and attach callbacks that run when something happens. You then have to keep those long-lived widgets in sync with your data.
+
+In egui there are no long-lived widgets. Instead, your `ui` function runs again every time the window is drawn, and it describes the whole interface from scratch, based on your current data:
+
+<Example name="concept_immediate" />
+
+Look at the label that says "Here are the details!". There is no code that shows it and no code that hides it. On frames where `show_details` is true the line runs, so the label is there. On other frames it doesn't, so it isn't.
+
+The counter at the bottom shows how often `ui` runs. Move the mouse over the window and watch it climb.
+
+## What this means for you
+
+**The UI is a function of your state.** To change what is on screen, change your data. You never update a widget.
+
+**Events are just `if` statements.** A button is drawn and checked on the same line:
+
+<Example name="first_app" item={'if ui.button("+")'} />
+
+**Control flow is layout.** A `for` loop draws a list. An `if` shows or hides a section. A `match` switches between pages. There is nothing else to learn for dynamic UIs.
+
+**Your data is the only state.** Widgets like checkboxes and text fields edit values that you own, through a `&mut` reference. There is nothing to copy back and forth.
+
+## Things to keep in mind
+
+**Keep `ui` fast.** It can run many times per second, so it should only do quick work. Loading a file or calling a web service belongs somewhere else. See [Doing slow work in the background](../cookbook/background-thread.mdx).
+
+**egui does not repaint all the time.** It redraws when there is input (a mouse move, a key press) or when something asks for it, and otherwise sleeps. If your app shows something that changes on its own, such as a clock, you need to ask for repaints. See [Repainting](./repainting.mdx).
+
+**egui remembers a few things for you.** Whether a collapsing header is open, how far a list is scrolled, where a window was dragged: egui keeps this small amount of UI state itself, keyed by an ID. Usually you never notice. When you do, the [IDs](./ids.mdx) page explains it.
+
+## Next
+
+See how an app is put together in [App structure](./app-structure.mdx).

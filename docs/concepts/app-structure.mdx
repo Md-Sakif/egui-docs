@@ -1,0 +1,65 @@
+---
+title: App structure
+---
+
+# App structure
+
+Every eframe app has the same three parts: a `main` function that starts it, a struct that holds its state, and a `ui` function that draws it.
+
+<Example name="concept_app" />
+
+## The life of an app
+
+1. **`main` calls `eframe::run_native`.** This opens the window and does not return until the app is closed.
+2. **Your creator function runs once.** That is the `|cc| Ok(Box::new(MyApp::new(cc)))` part. It builds your app struct.
+3. **`ui` runs every frame**, for as long as the window is open.
+4. **The app shuts down** when the window is closed.
+
+## Startup: the creation context
+
+<Example name="concept_app" item="fn new" />
+
+The creator function gets a `CreationContext`, usually called `cc`. It is your chance to set things up before the first frame:
+
+| Field | What it is for |
+|---|---|
+| `cc.egui_ctx` | The egui context. Use it to set the [theme and style](./styling.mdx), install [fonts](../cookbook/custom-font.mdx) or image loaders |
+| `cc.storage` | Previously saved state, if any. See [Saving state between runs](../cookbook/persistence.mdx) |
+
+If your app needs no setup, you can skip `new` and let Rust build the struct with `Default`, as most small examples in these docs do:
+
+<Example name="first_app" item="eframe::run_native" />
+
+## Every frame: `ui`
+
+<Example name="concept_app" item="impl eframe::App" />
+
+`ui` gets two arguments:
+
+- **`ui`** is the root of your interface. It covers the whole window and has no background or margin of its own, which is why nearly every app starts by adding a [`CentralPanel`](../containers/central-panel.mdx).
+- **`frame`** gives access to eframe itself. Most apps don't need it, so the examples name it `_frame`.
+
+### `Ui` and `Context`
+
+You will see two types everywhere:
+
+- A **`Ui`** is a region of the screen that you add widgets to. Every container gives you a new, smaller `Ui` in its closure.
+- The **`Context`** is egui's global state: input, style, memory. You get it from any `Ui` with `ui.ctx()`. It is cheap to clone and safe to use from other threads.
+
+As a convenience, a `Ui` lets you call `Context` methods directly. `ui.input(...)` and `ui.ctx().input(...)` do the same thing.
+
+## Other methods you can implement
+
+`ui` is the only method you must write. The `eframe::App` trait has a few optional ones:
+
+| Method | When it is called |
+|---|---|
+| `logic(&mut self, ctx, frame)` | Before each call to `ui`, and also while the window is hidden. For work that must go on even when nothing is drawn. You may not show any UI here |
+| `save(&mut self, storage)` | On shutdown and at regular intervals, if the `persistence` feature is on. See [Saving state between runs](../cookbook/persistence.mdx) |
+| `on_exit(&mut self)` | Once, on shutdown, after `save` |
+| `auto_save_interval(&self)` | Return how often `save` should be called. The default is every 30 seconds |
+| `clear_color(&self, visuals)` | The color behind your panels. Only visible where no panel covers the window |
+
+## Next
+
+Learn how widgets are arranged in [Layout](./layout.mdx).

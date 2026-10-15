@@ -1,0 +1,37 @@
+---
+title: Zooming the UI
+---
+
+# Zooming the UI
+
+egui can scale the whole interface, text and widgets together, like zooming a page in a web browser.
+
+<Example name="cookbook_zoom" />
+
+## It already works
+
+In an eframe app, users can zoom with the keyboard without any code from you:
+
+- **Ctrl + Plus** zooms in
+- **Ctrl + Minus** zooms out
+- **Ctrl + 0** resets
+
+(On macOS, use Cmd instead of Ctrl.)
+
+## Zooming from code
+
+| Call | What it does |
+|---|---|
+| `ctx.set_zoom_factor(1.5)` | Set the zoom. 1.0 is normal size |
+| `ctx.zoom_factor()` | The current zoom |
+| `egui::gui_zoom::zoom_in(ctx)` | One step bigger, the same as Ctrl + Plus |
+| `egui::gui_zoom::zoom_out(ctx)` | One step smaller |
+| `egui::gui_zoom::zoom_menu_buttons(ui)` | Ready-made "Zoom in", "Zoom out" and "Reset" items for a [menu](../containers/menu.mdx) |
+
+To start your app zoomed, call `set_zoom_factor` in your app's `new` function with `cc.egui_ctx`.
+
+## Good to know
+
+- Zoom is on top of the screen's own scaling. On a high-density display egui already draws at the right physical size. A zoom factor of 1.0 means "what the system asks for".
+- The zoom factor is saved with the rest of egui's state when you turn on [persistence](./persistence.mdx).
+- To make only the text bigger, change the [text styles](../concepts/styling.mdx#text-sizes) instead.

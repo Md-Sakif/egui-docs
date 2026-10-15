@@ -1,0 +1,47 @@
+---
+title: Containers
+slug: /containers
+---
+
+# Containers
+
+A container holds other widgets. It gives you a new `Ui` in a closure, and whatever you add there ends up inside it. Here a group draws a box around a label and a button:
+
+<Example name="container_frame" item="ui.group" />
+
+Containers decide where their content goes (a sidebar, a floating window, a scrollable box) and often draw something around it.
+
+## Dividing up the window
+
+<Cards>
+  <Card to="/docs/containers/central-panel" title="CentralPanel">The main area of your app</Card>
+  <Card to="/docs/containers/panel" title="Panel">Sidebars, toolbars and status bars</Card>
+  <Card to="/docs/containers/window" title="Window">A floating, movable window inside your app</Card>
+  <Card to="/docs/containers/area" title="Area">A bare floating layer, for overlays and badges</Card>
+</Cards>
+
+## Organizing content
+
+<Cards>
+  <Card to="/docs/containers/frame" title="Frame">A background, border and padding around anything</Card>
+  <Card to="/docs/containers/scroll-area" title="ScrollArea">Content that is bigger than its space</Card>
+  <Card to="/docs/containers/grid" title="Grid">Rows and columns that line up</Card>
+  <Card to="/docs/containers/collapsing-header" title="CollapsingHeader">Sections that fold away</Card>
+  <Card to="/docs/containers/sides" title="Sides">Something on the left, something on the right</Card>
+  <Card to="/docs/containers/resize" title="Resize">A box the user can resize</Card>
+  <Card to="/docs/containers/scene" title="Scene">A canvas you can pan and zoom</Card>
+</Cards>
+
+## Menus and pop-ups
+
+<Cards>
+  <Card to="/docs/containers/menu" title="Menus">A menu bar with drop-down menus</Card>
+  <Card to="/docs/containers/context-menu" title="Context menu">A right-click menu on any widget</Card>
+  <Card to="/docs/containers/popup" title="Popup">A small panel that opens next to a button</Card>
+  <Card to="/docs/containers/tooltip" title="Tooltip">A hint that appears on hover</Card>
+  <Card to="/docs/containers/modal" title="Modal">A dialog that blocks the rest of the app</Card>
+</Cards>
+
+:::note Layout helpers
+`ui.horizontal`, `ui.vertical`, `ui.columns` and friends also take a closure, but they only arrange widgets. They are covered in [Layout](../concepts/layout.mdx).
+:::

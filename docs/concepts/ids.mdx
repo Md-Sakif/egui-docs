@@ -1,0 +1,48 @@
+---
+title: IDs
+---
+
+# IDs
+
+Your `ui` function rebuilds the interface every frame, but some things have to survive from one frame to the next: whether a collapsing header is open, how far a list is scrolled, where a window was dragged. egui stores that state itself and finds it again by **ID**.
+
+You rarely think about IDs. This page is for the times you have to.
+
+## Where IDs come from
+
+Widgets and containers that keep state get an ID automatically. For many of them it is based on their label or title: a collapsing header called "Details" gets an ID made from the text "Details" and the ID of the `Ui` it is in.
+
+That works until two things in the same place have the same label.
+
+## The problem: same label, same ID
+
+Imagine a list where every entry has a "Details" section. All of them would get the same ID, so opening one would open them all.
+
+## The fix: give each one its own ID
+
+<Example name="concept_ids" />
+
+There are two tools:
+
+**`ui.push_id(something_unique, ...)`** creates a new ID namespace for everything inside its closure. In a loop, pass the thing that makes each iteration different: an index, a name, a database key.
+
+<Example name="concept_ids" item="for name in" />
+
+**`.id_salt(something_unique)`** is offered by most containers that keep state, such as `CollapsingHeader`, `ScrollArea`, `Grid` and `ComboBox`. It replaces the label as the source of the ID:
+
+<Example name="concept_ids" item="egui::CollapsingHeader::new" />
+
+## IDs you choose yourself
+
+A few containers have no label to build an ID from, so you must name them:
+
+- `Panel::left("sidebar")`, `Panel::top("toolbar")`
+- `Grid::new("settings_grid")`
+- `Area::new(egui::Id::new("badge"))`
+- `Modal::new(egui::Id::new("confirm_delete"))`
+
+Any name works, as long as it is different from the others in the same place.
+
+:::tip Prefer stable IDs in lists
+If items can be reordered or deleted, base the ID on something that belongs to the item (its key or name), not on its position in the list. Otherwise the "open" state of the third item moves to whatever item becomes third.
+:::

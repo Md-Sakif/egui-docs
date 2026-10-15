@@ -1,0 +1,107 @@
+---
+title: Web
+---
+
+import CodeBlock from '@theme/CodeBlock';
+import MainRs from '!!raw-loader!@site/web-example/src/main.rs';
+import IndexHtml from '!!raw-loader!@site/web-example/index.html';
+import CargoToml from '!!raw-loader!@site/web-example/Cargo.toml';
+
+# Publishing for the web
+
+The same eframe app can run in a web browser. Your Rust code is compiled to WebAssembly and draws into a `<canvas>` element on a page.
+
+This is the example from this page, running in Chromium:
+
+<Screenshot name="web_example" single />
+
+## What you need
+
+**The WebAssembly target** for Rust:
+
+```bash
+rustup target add wasm32-unknown-unknown
+```
+
+**[Trunk](https://trunkrs.dev)**, a build tool for Rust web apps. It compiles your crate, generates the JavaScript that loads it, and serves the result during development:
+
+```bash
+cargo install --locked trunk
+```
+
+## The project
+
+A web-ready project has three files. The complete project is in the `web-example` folder of these docs.
+
+### Cargo.toml
+
+<CodeBlock language="toml" title="Cargo.toml">{CargoToml}</CodeBlock>
+
+The two extra crates are only used in the browser, so they are listed as dependencies for the `wasm32` target only.
+
+### index.html
+
+Trunk starts from an HTML file. It needs two things: a link that tells Trunk to build your crate, and a canvas for the app to draw on.
+
+<CodeBlock language="html" title="index.html">{IndexHtml}</CodeBlock>
+
+### src/main.rs
+
+<CodeBlock language="rust" title="src/main.rs">{MainRs}</CodeBlock>
+
+The app itself, `MyApp` and its `ui` function, is written once. Only `main` differs:
+
+- On the **desktop**, `main` calls `eframe::run_native`, as always.
+- On the **web**, `main` finds the canvas by its ID and hands it to `eframe::WebRunner`. Starting the app is asynchronous in a browser, which is why it happens inside `spawn_local`.
+
+`#[cfg(target_arch = "wasm32")]` picks the right `main` at compile time.
+
+## Run it
+
+During development:
+
+```bash
+trunk serve
+```
+
+Trunk builds the app, serves it on `http://127.0.0.1:8080` and rebuilds when you save a file.
+
+The very same project still runs as a desktop app:
+
+```bash
+cargo run
+```
+
+## Build it for publishing
+
+```bash
+trunk build --release
+```
+
+This writes everything a web server needs into the `dist` folder: `index.html`, a `.js` file and a `.wasm` file. Upload that folder to any static file host.
+
+A release build is far smaller than a development build, because Trunk also runs an optimizer over the WebAssembly. For the example on this page, the `.wasm` file was 39.8 MB after `trunk build` and 7.0 MB after `trunk build --release`.
+
+:::note The first build downloads tools
+Trunk fetches two helper programs the first time it needs them: `wasm-bindgen` on the first build, and the `wasm-opt` optimizer on the first release build. Those builds need an internet connection and take longer.
+:::
+
+:::tip Hosting in a sub-folder
+If the app will not live at the root of its domain (for example on GitHub Pages, at `https://name.github.io/project/`), tell Trunk the path so the links in `index.html` are right: `trunk build --release --public-url /project/`.
+:::
+
+## What is different on the web
+
+Most of egui works the same. A few things follow the browser's rules:
+
+- **Files.** A web app cannot read arbitrary files from disk. [Dropped files](../cookbook/file-drop.mdx) give you a name and their contents, not a path.
+- **Threads.** `std::thread::spawn` is not available in the browser by default. Use asynchronous code for [background work](../cookbook/background-thread.mdx) instead.
+- **Windows.** There is one canvas, so [extra viewports](../cookbook/multiple-windows.mdx) are shown as floating windows inside it.
+- **Saved state** goes to the browser's local storage. See [Saving state](../cookbook/persistence.mdx).
+- **Links.** `open_in_new_tab` on a [Hyperlink](../widgets/hyperlink.mdx) decides whether a link replaces your app or opens beside it.
+
+Use `cfg!(target_arch = "wasm32")`, as the example does for its last label, when a small piece of code must differ.
+
+:::info How this page is tested
+The `web-example` project was built with Trunk and loaded in a headless Chromium browser. The test clicked the button three times and took the screenshot at the top of this page. The browser console showed no errors.
+:::

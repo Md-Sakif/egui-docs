@@ -1,0 +1,45 @@
+---
+title: Your own widget
+---
+
+# Writing your own widget
+
+When none of the built-in widgets fit, you can make your own. A widget is nothing more than a function that takes a `Ui`, draws something, and returns a `Response`.
+
+This page builds a toggle switch:
+
+<Example name="widget_custom" />
+
+## The recipe
+
+Every custom widget follows the same five steps. They are numbered in the code:
+
+<Example name="widget_custom" item="fn toggle" />
+
+1. **Decide the size.** Here it is based on `interact_size`, the standard height of clickable things, so the switch matches the rest of the UI.
+2. **Allocate the space.** `allocate_exact_size` reserves a rectangle in the layout and returns a `Response` for it. The `Sense` says what interaction you want to hear about.
+3. **Handle the interaction.** Flip the value on click, and call `mark_changed` so that callers can use `.changed()`.
+4. **Paint.** `ui.painter()` draws shapes. See [Custom painting](../concepts/painting.mdx) for what it can do. Skipping the painting when the rectangle is off screen keeps long scrolling lists fast.
+5. **Return the response.** This is what makes your widget behave like a built-in one: callers can chain `.on_hover_text(...)`, check `.clicked()`, and so on.
+
+## Looking native
+
+Two calls make the switch fit in with any theme:
+
+- **`ui.style().interact_selectable(&response, on)`** returns the colors egui itself would use for a widget in this state: hovered or not, pressed or not, selected or not. Using them means the switch follows dark mode, light mode and any [custom style](../concepts/styling.mdx).
+- **`ctx.animate_bool_responsive(id, on)`** returns a number that glides from 0 to 1 when `on` changes, so the knob slides instead of jumping. More in the [Animation](../cookbook/animation.mdx) recipe.
+
+## Using it
+
+Because the function returns something that implements `egui::Widget`, it is added like any other widget:
+
+<Example name="widget_custom" item="ui.add(toggle(&mut self.wifi))" />
+
+## Accessibility
+
+`response.widget_info(...)` describes the widget to screen readers: what kind of control it is and what state it is in. The same information lets automated UI tests find and click the widget, which is how the test for this page works.
+
+## Good to know
+
+- A closure of the form `move |ui: &mut egui::Ui| -> egui::Response` is a widget. For something with many options, write a struct instead and implement the `egui::Widget` trait for it, the way `egui::Button` does.
+- Start simple. Many "custom widgets" are just a function that takes `&mut Ui` and adds a few built-in widgets in a row.

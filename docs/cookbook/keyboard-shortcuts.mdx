@@ -1,0 +1,34 @@
+---
+title: Keyboard shortcuts
+---
+
+# Keyboard shortcuts
+
+A `KeyboardShortcut` is a key plus modifiers. egui can check whether it was pressed and can also write it out the way each platform expects.
+
+<Example name="cookbook_shortcuts" />
+
+## How it works
+
+**Define each shortcut once**, as a constant:
+
+<Example name="cookbook_shortcuts" item="const SAVE" />
+
+`Modifiers::COMMAND` is the right choice for most shortcuts: it means Cmd on macOS and Ctrl on Windows and Linux. Combine modifiers with `|`, as in `Modifiers::COMMAND | Modifiers::SHIFT`.
+
+**Check for it at the start of `ui`:**
+
+<Example name="cookbook_shortcuts" item="if ui.input_mut(|i| i.consume_shortcut(&SAVE))" />
+
+`consume_shortcut` returns true when the combination was pressed, and removes the key press from the input. That way a focused text field does not also receive the "s".
+
+**Show it to the user.** `format_shortcut` produces "Ctrl+S" on Windows and Linux and the Mac symbols on macOS. Putting it on the button that does the same thing teaches people the shortcut:
+
+<Example name="cookbook_shortcuts" item="let save_button" to="if ui.add(save_button)" />
+
+## Good to know
+
+- Do the same action from both places. Here the shortcut and the button both push "Saved" to the log. In a real app, call one shared method.
+- Check shortcuts before you draw the widgets, so the shortcut wins over a text field that has focus.
+- If two shortcuts share a key, check the one with more modifiers first. Ctrl+Shift+S must be consumed before Ctrl+S gets a chance to match.
+- egui already handles some shortcuts itself, including copy, cut, paste and undo in text fields, and [zooming](./zoom.mdx).

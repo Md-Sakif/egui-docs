@@ -1,0 +1,51 @@
+---
+title: Repainting
+---
+
+# Repainting
+
+Your `ui` function does not run in a constant loop. To save battery and CPU, eframe redraws the window only when there is a reason to:
+
+- the user moved the mouse, clicked, typed or scrolled,
+- the window was resized or uncovered,
+- an animation inside egui is in progress,
+- or your code asked for it.
+
+Between those moments the app sleeps. For most apps that is exactly right, and you never have to think about it.
+
+It matters when your app shows something that changes **on its own**: a clock, a progress bar fed by a background job, a game. Then you have to ask for the next frame yourself.
+
+<Example name="concept_repaint" />
+
+Without the call to `request_repaint`, this stopwatch would only move while you wiggle the mouse over the window.
+
+## Ways to ask for a repaint
+
+| Call | When to use it |
+|---|---|
+| `ctx.request_repaint()` | "Draw again as soon as possible." Call it every frame for continuous animation |
+| `ctx.request_repaint_after(duration)` | "Draw again after this long, unless something happens sooner." Good for clocks and polling |
+| `ctx.request_repaint_after_secs(seconds)` | The same, taking seconds as an `f32` |
+
+Here `ctx` is the egui `Context`, which you get with `ui.ctx()`.
+
+:::tip Repaint only as often as you need
+A clock that shows seconds does not need 60 frames per second. `request_repaint_after(Duration::from_secs(1))` keeps it correct and lets the app sleep in between.
+:::
+
+## Measuring time
+
+Because frames don't arrive at a fixed rate, never assume how long a frame took. Ask:
+
+- `ui.input(|i| i.stable_dt)` is the time since the previous frame, in seconds.
+- `ui.input(|i| i.time)` is the time since the app started, in seconds.
+
+The stopwatch adds `stable_dt` to its total on every frame, so it stays correct at any frame rate.
+
+## Repainting from another thread
+
+When a background thread has new data to show, it has to wake up the UI. The `Context` can be cloned and sent to other threads for exactly this purpose. See [Doing slow work in the background](../cookbook/background-thread.mdx).
+
+## Animations
+
+For simple transitions you don't have to manage time at all. `ctx.animate_bool` gives you a value that glides between 0 and 1 and takes care of repainting until it arrives. See the [Animation](../cookbook/animation.mdx) recipe.

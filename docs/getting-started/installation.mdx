@@ -1,0 +1,74 @@
+---
+title: Installation
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Installation
+
+egui and eframe are ordinary Rust crates, so there is nothing special to install: you need Rust, and then you add one dependency to your project.
+
+## 1. Install Rust
+
+If you don't have Rust yet, install it with [rustup](https://rustup.rs), the official installer. It works the same way on every platform and also gives you `cargo`, Rust's build tool.
+
+<Tabs groupId="os">
+  <TabItem value="linux" label="Linux">
+    Follow the instructions on [rustup.rs](https://rustup.rs). You also need a C compiler and linker, which most desktop distributions already have (on Debian and Ubuntu they are in the `build-essential` package).
+  </TabItem>
+  <TabItem value="macos" label="macOS">
+    Follow the instructions on [rustup.rs](https://rustup.rs). The installer will ask you to install Apple's command line developer tools if they are missing.
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+    Download and run `rustup-init.exe` from [rustup.rs](https://rustup.rs). When it offers to install the Visual Studio C++ build tools, accept: Rust needs them to link programs.
+  </TabItem>
+</Tabs>
+
+Check that it worked:
+
+```bash
+rustc --version
+```
+
+:::warning You need Rust 1.95 or newer
+eframe 0.36 does not compile with older versions. If `rustc --version` prints something older, update with:
+
+```bash
+rustup update
+```
+
+Some Linux distributions ship their own, older Rust package. If `rustup update` does not seem to help, make sure the `rustc` in your `PATH` is the one from rustup and not the one from your distribution.
+:::
+
+## 2. Create a project
+
+```bash
+cargo new my-app
+cd my-app
+```
+
+This creates a folder with a `Cargo.toml` and a `src/main.rs` that prints "Hello, world!".
+
+## 3. Add eframe
+
+```bash
+cargo add eframe
+```
+
+Your `Cargo.toml` now has this line (the exact patch version may be newer):
+
+```toml title="Cargo.toml"
+[dependencies]
+eframe = "0.36.2"
+```
+
+That is the whole installation. You don't need to add `egui` separately, because `eframe` includes it and makes it available as `eframe::egui`.
+
+:::tip The first build takes a while
+The first `cargo build` downloads and compiles a few hundred crates, which can take several minutes. Later builds only recompile your own code and take seconds.
+:::
+
+## Next step
+
+You are ready to [create your first app](./first-app.mdx).

@@ -1,0 +1,50 @@
+---
+title: Window options
+---
+
+# Window options
+
+The window your app lives in is called a **viewport** in egui. You describe it with a `ViewportBuilder` before the app starts, and you can change it later by sending **viewport commands**.
+
+<Example name="window_options" />
+
+## Before the app starts
+
+Everything about the initial window goes into `NativeOptions`:
+
+<Example name="window_options" item="let options" />
+
+These are the `ViewportBuilder` methods used in this example:
+
+| Method | What it does |
+|---|---|
+| `with_title("...")` | The text in the title bar |
+| `with_inner_size([w, h])` | The starting size of the window's content, in points |
+| `with_min_inner_size([w, h])` | The user cannot make the window smaller than this |
+| `with_icon(icon)` | The window icon |
+| `with_resizable(false)` | Fix the size (used in the [Calculator tutorial](../tutorials/calculator.mdx)) |
+
+The icon is loaded from a PNG that is baked into the executable with `include_bytes!`, so there is no extra file to ship. The path is relative to the source file.
+
+:::note Points, not pixels
+Sizes in egui are in *points*. On a high-density screen one point covers more than one physical pixel, so your UI keeps the same physical size everywhere.
+:::
+
+## While the app runs
+
+To change the window later, send a command. This is how the checkbox and buttons in the example work:
+
+<Example name="window_options" item={'if ui.button("Rename the window")'} />
+
+Some commands you will reach for often:
+
+| Command | What it does |
+|---|---|
+| `ViewportCommand::Title(String)` | Change the title |
+| `ViewportCommand::Fullscreen(bool)` | Enter or leave fullscreen |
+| `ViewportCommand::WindowLevel(level)` | Keep the window above others, or back to normal |
+| `ViewportCommand::InnerSize(vec2)` | Resize the window |
+| `ViewportCommand::Minimized(bool)` / `Maximized(bool)` | Minimize or maximize |
+| `ViewportCommand::Close` | Close the window, which ends the app |
+
+To ask the user before closing, see the [Confirm before exit](../cookbook/confirm-exit.mdx) recipe. To open more than one window, see [Multiple windows](../cookbook/multiple-windows.mdx).

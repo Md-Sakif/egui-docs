@@ -1,0 +1,29 @@
+---
+title: Confirm before exit
+---
+
+# Confirm before exit
+
+When the user closes the window with unsaved work, you can step in, keep the window open, and ask first.
+
+<Example name="cookbook_confirm_exit" shot="cookbook_confirm_exit_open" />
+
+## How it works
+
+**1. Notice the close request.** When the user clicks the window's close button, the window is not closed at once. First your `ui` runs with `close_requested()` returning true:
+
+<Example name="cookbook_confirm_exit" item="let close_requested" />
+
+**2. Cancel it.** Sending `ViewportCommand::CancelClose` in that same frame keeps the window open. The example then sets a flag to show a [modal](../containers/modal.mdx):
+
+<Example name="cookbook_confirm_exit" item="if close_requested && unsaved_changes" />
+
+**3. Close for real when the user agrees.** The "Quit" button sets `allowed_to_close` and sends `ViewportCommand::Close`. That triggers a new close request, and this time the check lets it through:
+
+<Example name="cookbook_confirm_exit" item={'if ui.button("Quit")'} />
+
+## Good to know
+
+- The `allowed_to_close` flag is essential. Without it, the close that "Quit" asks for would be cancelled again, and the window could never be closed.
+- Only ask when there is something to lose. The example closes immediately while the text is empty.
+- This also catches Alt+F4 and other ways the system asks a window to close. It cannot stop the app from being killed.

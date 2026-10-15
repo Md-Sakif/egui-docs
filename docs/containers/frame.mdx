@@ -1,0 +1,47 @@
+---
+title: Frame
+---
+
+# Frame
+
+A `Frame` draws a box around its content: a background, a border, rounded corners and padding. It is how you group things visually.
+
+<Example name="container_frame" />
+
+## The basics
+
+Build a frame, then `show` it with the content inside:
+
+<Example name="container_frame" item="egui::Frame::new()" />
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.fill(color)` | Background color |
+| `.stroke(stroke)` | Border width and color |
+| `.corner_radius(10)` | Rounded corners |
+| `.inner_margin(12)` | Padding between the border and the content |
+| `.outer_margin(8)` | Space around the outside of the frame |
+| `.shadow(shadow)` | A drop shadow |
+
+## Ready-made frames
+
+These follow the current theme, so they look right in dark and light mode. Each takes the style: `egui::Frame::group(ui.style())`.
+
+| Frame | Looks like |
+|---|---|
+| `Frame::group(style)` | A thin outline. Also available as the shortcut `ui.group(...)` |
+| `Frame::popup(style)` | A small floating panel with a shadow |
+| `Frame::window(style)` | The body of a [Window](./window.mdx) |
+| `Frame::menu(style)` | A [menu](./menu.mdx) |
+| `Frame::canvas(style)` | A sunken area for drawings and plots |
+| `Frame::central_panel(style)` | The background of a [CentralPanel](./central-panel.mdx) |
+
+Start from one of these and adjust it, for example `Frame::group(ui.style()).inner_margin(16)`.
+
+## Good to know
+
+- Many containers accept a frame to replace their default look: panels, windows and text fields all have a `.frame(...)` method.
+- A frame is as big as its content plus its margins. To make it fill the available width, call `ui.set_min_width(ui.available_width())` inside it.
+- Colors you choose by hand are the same in both themes. Check that text on a filled frame is readable in each.

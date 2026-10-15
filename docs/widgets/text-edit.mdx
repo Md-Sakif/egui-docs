@@ -1,0 +1,57 @@
+---
+title: TextEdit
+---
+
+# TextEdit
+
+A text field. It edits a `String` that belongs to you.
+
+<Example name="widget_text_edit" />
+
+## The basics
+
+| Call | Gives you |
+|---|---|
+| `ui.text_edit_singleline(&mut text)` | A one-line field |
+| `ui.text_edit_multiline(&mut text)` | A field with several lines |
+| `ui.code_editor(&mut text)` | A multi-line field in a fixed-width font |
+
+Your `String` always holds what is in the field. To react to edits, check the response:
+
+- `.changed()` is true on every frame where the text was modified.
+- `.lost_focus()` is true when the user leaves the field.
+
+## Options
+
+Build the field with `egui::TextEdit::singleline(&mut text)` or `egui::TextEdit::multiline(&mut text)`:
+
+| Method | What it does |
+|---|---|
+| `.hint_text("...")` | Greyed-out text shown while the field is empty |
+| `.password(true)` | Show dots instead of the characters |
+| `.char_limit(4)` | The maximum number of characters |
+| `.desired_width(120.0)` | The width. Use `f32::INFINITY` to fill the available space |
+| `.desired_rows(3)` | The height of a multi-line field, in lines |
+| `.code_editor()` | Fixed-width font, and Tab inserts a tab |
+| `.interactive(false)` | Read-only |
+| `.font(egui::TextStyle::Monospace)` | The font to use |
+| `.text_color(color)` | The text color |
+| `.margin(margin)` | Space between the text and the edge of the field |
+| `.frame(frame)` | A custom background and border |
+| `.horizontal_align(align)` | Left, centered or right-aligned text |
+| `.clip_text(false)` | Let a single-line field grow with its text |
+| `.lock_focus(true)` | Keep focus when Tab is pressed |
+
+## Submitting with Enter
+
+A single-line field gives up focus when the user presses Enter. Combine the two facts to detect "the user submitted this text":
+
+<Example name="todo_1_add" item="let pressed_enter" />
+
+The [To-do tutorial](../tutorials/todo.mdx) uses this to add a task.
+
+## Good to know
+
+- `response.request_focus()` moves the cursor into a field from code, for example right after a dialog opens.
+- A full-width field needs `.desired_width(f32::INFINITY)`. Without it a text field keeps a fixed default width.
+- For numbers, use a [DragValue](./drag-value.mdx) or [Slider](./slider.mdx) instead of parsing text yourself.

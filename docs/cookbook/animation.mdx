@@ -1,0 +1,49 @@
+---
+title: Animation
+---
+
+# Animation
+
+egui can animate a value for you. You say what the value *should* be, and egui gives you a number that glides there over a short time.
+
+Collapsed and expanded:
+
+<Screenshot name="cookbook_animation_collapsed" />
+
+<Example name="cookbook_animation" />
+
+## How it works
+
+`animate_bool_with_time` takes a `bool` and returns a number between 0.0 and 1.0:
+
+<Example name="cookbook_animation" item="let t" />
+
+- While `expanded` stays the same, `t` is steady at 0.0 or 1.0.
+- When `expanded` flips, `t` moves smoothly to the other end over 0.4 seconds.
+
+You then use `t` for whatever should move. `egui::lerp(a..=b, t)` turns it into a value between `a` and `b`:
+
+<Example name="cookbook_animation" item="let width" to="ui.painter().rect_filled" />
+
+The animation needs an [ID](../concepts/ids.mdx) so that egui can remember how far along it is. `ui.id().with("some name")` makes one that is unique to this spot in the UI.
+
+## You don't manage repaints
+
+While an animation is in progress, egui keeps redrawing by itself. When it arrives, the app goes back to sleep. You never call `request_repaint` for this.
+
+## The animation functions
+
+| Call | Result |
+|---|---|
+| `ctx.animate_bool(id, value)` | 0.0 to 1.0, using the style's standard animation time |
+| `ctx.animate_bool_responsive(id, value)` | The same, with an easing that suits controls such as switches |
+| `ctx.animate_bool_with_time(id, value, seconds)` | 0.0 to 1.0 over a duration you choose |
+| `ctx.animate_bool_with_easing(id, value, easing)` | With an easing function of your choice |
+| `ctx.animate_value_with_time(id, target, seconds)` | Glide toward any number, not just 0 and 1 |
+
+## Good to know
+
+- To fade something in and out, pass `t` to `ui.set_opacity(t)` before adding it.
+- Built-in widgets already animate: collapsing headers, panels that slide, the toggle in [Your own widget](../widgets/custom-widget.mdx).
+- The standard animation time is `animation_time` in the [style](../concepts/styling.mdx). Set it to 0.0 to turn off egui's own animations.
+- For continuous motion such as a game or a clock, drive it yourself. See [Repainting](../concepts/repainting.mdx).

@@ -1,0 +1,44 @@
+---
+title: Modal
+---
+
+# Modal
+
+A modal is a dialog in the middle of the screen that must be dealt with before anything else. The rest of the app is dimmed and does not react until the modal is closed. Use it for confirmations and for questions that cannot wait.
+
+<Example name="container_modal" shot="container_modal_open" />
+
+## The basics
+
+A modal has no "open" method. Like everything in egui, it is visible on the frames where your code shows it. So you keep a `bool` and show the modal while it is true:
+
+<Example name="container_modal" item="if self.confirm_open" />
+
+## Closing
+
+There are three ways a modal asks to be closed, and `should_close()` covers them all:
+
+- your code called `ui.close()` inside the modal, as both buttons in the example do,
+- the user clicked on the dimmed area outside it,
+- the user pressed Escape.
+
+When `should_close()` returns true, set your bool to `false`, and the modal is gone on the next frame.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.frame(frame)` | A custom [Frame](./frame.mdx) for the dialog |
+| `.backdrop_color(color)` | The color that dims the rest of the app |
+| `.area(area)` | A custom [Area](./area.mdx), for example to move the dialog away from the center |
+
+## Getting an answer out of a modal
+
+`show` returns a `ModalResponse`. Its `inner` field is whatever your closure returned, which is a tidy way to report which button was pressed. The example takes the simpler route and sets `self.deleted` directly.
+
+## Good to know
+
+- A modal sizes itself to its content. `ui.set_width(...)` inside it gives it a fixed width.
+- Modals can be stacked: a modal opened while another is showing appears on top.
+- To ask before the *app* closes, see [Confirm before exit](../cookbook/confirm-exit.mdx).
+- For a floating window that does not block the app, use a [Window](./window.mdx).

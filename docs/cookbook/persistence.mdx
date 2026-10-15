@@ -1,0 +1,63 @@
+---
+title: Saving state between runs
+---
+
+# Saving state between runs
+
+eframe can save your app's state when it closes and hand it back when it starts again.
+
+<Example name="cookbook_persistence" />
+
+## Setup
+
+Persistence is an optional feature of eframe, and it uses `serde` to turn your struct into text:
+
+```toml title="Cargo.toml"
+[dependencies]
+eframe = { version = "0.36.2", features = ["persistence"] }
+serde = { version = "1", features = ["derive"] }
+```
+
+## How it works
+
+**1. Make your state serializable.** Derive `Serialize` and `Deserialize`, plus `Default` for the very first run:
+
+<Example name="cookbook_persistence" item="struct MyApp" />
+
+**2. Save it.** eframe calls `save` when the app closes, and every 30 seconds while it runs:
+
+<Example name="cookbook_persistence" item="fn save" />
+
+**3. Load it at startup.** `cc.storage` holds what was saved last time. On the first run there is nothing, so fall back to the default:
+
+<Example name="cookbook_persistence" item="fn new" />
+
+That's all. The example counts how often it has been started, to show that the number really survives a restart.
+
+## What else is saved
+
+With the feature turned on, eframe also remembers things you did not ask for, which is usually welcome:
+
+- the position and size of the app's window,
+- egui's own memory: positions of [windows](../containers/window.mdx), open [collapsing headers](../containers/collapsing-header.mdx), scroll positions, the theme choice and the [zoom](./zoom.mdx).
+
+## Where it goes
+
+On the desktop the state is written to a file in the user's data directory, in a folder named after your app. The name comes from the first argument of `eframe::run_native`. On Linux, this example's state ends up in `~/.local/share/persistence/app.ron`.
+
+In a web app the same code stores the state in the browser's local storage.
+
+:::warning Changing the name loses the data
+The app name decides the folder. If you rename the app in `run_native`, it will start fresh, because it looks in a new place.
+:::
+
+## Good to know
+
+- **Fields you don't want to save** can be marked with `#[serde(skip)]`. They get their default value on load.
+- **Adding fields later:** put `#[serde(default)]` on the struct, so that state saved by an older version of your app still loads and new fields get their defaults.
+- `eframe::APP_KEY` is just a ready-made key. You can save several values under keys of your own with `set_value` and `get_value`.
+- Override `auto_save_interval` in your `App` to save more or less often.
+
+:::info How this page is tested
+Besides the usual UI test, this example was started as a real program twice in a row. The saved file showed `visits: 1` after the first run and `visits: 2` after the second.
+:::

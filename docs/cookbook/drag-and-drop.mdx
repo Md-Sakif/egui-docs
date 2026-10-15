@@ -1,0 +1,36 @@
+---
+title: Drag and drop
+---
+
+# Drag and drop
+
+egui has built-in drag and drop for moving things within your app. You mark what can be dragged, mark where it can be dropped, and attach a small piece of data, the **payload**, that says what is being moved.
+
+<Example name="cookbook_drag_and_drop" shot="cookbook_drag_and_drop_dragging" />
+
+## How it works
+
+**1. Define the payload.** It can be any type. Here it records where the dragged item came from:
+
+<Example name="cookbook_drag_and_drop" item="struct DragPayload" />
+
+**2. Make things draggable.** `dnd_drag_source` wraps a piece of UI and makes it draggable. It needs a unique [ID](../concepts/ids.mdx) and the payload to carry:
+
+<Example name="cookbook_drag_and_drop" item="for (row, item)" />
+
+**3. Make drop zones.** `dnd_drop_zone` draws a frame around its content and lights it up while a matching payload hovers over it. It returns the payload on the frame it is dropped:
+
+<Example name="cookbook_drag_and_drop" item="let (_, payload)" />
+
+The type you ask for matters. A zone for `DragPayload` reacts only to `DragPayload`s, so different kinds of draggable things in one app don't get mixed up.
+
+**4. Move the data afterwards.** The lists are being drawn while the drop is detected, so the example only remembers the drop and changes the lists once the drawing is done:
+
+<Example name="cookbook_drag_and_drop" item="if let Some((from, to_column))" />
+
+## Good to know
+
+- The payload must be cheap to create, because `dnd_drag_source` takes one on every frame. Indexes or IDs are ideal. Avoid cloning large data into it.
+- For finer control, responses have `dnd_set_drag_payload`, `dnd_hover_payload` and `dnd_release_payload`. With those you can, for example, find out *which row* something is hovering over, to insert it at that position.
+- This is for dragging inside your app. For files dragged in from the desktop, see [Dropping files](./file-drop.mdx).
+- For sortable lists with animation, the `egui_dnd` crate is a ready-made solution. See [Companion crates](../companion-crates.mdx).

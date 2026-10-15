@@ -1,0 +1,40 @@
+---
+title: Input
+---
+
+# Keyboard and mouse input
+
+Most of the time widgets handle input for you. When you need the raw facts (is a key down, where is the pointer) you ask the input state.
+
+<Example name="concept_input" />
+
+## How to read input
+
+`ui.input` gives you a short look at the current input through a closure. Return whatever you need from it:
+
+<Example name="concept_input" item="let modifiers" to={'ui.label(format!("Shift held'} />
+
+Keep the closure short and don't call other egui functions inside it. The input is locked while the closure runs.
+
+## What you can ask
+
+| Expression inside `ui.input(\|i\| ...)` | Meaning |
+|---|---|
+| `i.key_pressed(Key::Enter)` | The key went down since the last frame |
+| `i.key_down(Key::Space)` | The key is being held right now |
+| `i.key_released(Key::Space)` | The key was let go since the last frame |
+| `i.modifiers` | Which of Ctrl, Shift, Alt and Cmd are held. For example `i.modifiers.shift` |
+| `i.pointer.hover_pos()` | Where the pointer is, or `None` if it is outside the window |
+| `i.pointer.primary_down()` | The main mouse button is held |
+| `i.pointer.delta()` | How far the pointer moved since the last frame |
+| `i.smooth_scroll_delta` | How much the user scrolled |
+| `i.time` | Seconds since the app started |
+| `i.stable_dt` | Seconds since the previous frame. See [Repainting](./repainting.mdx) |
+
+## Keys typed into text fields
+
+While a text field has focus, typing goes to the text field, and a check like `key_pressed(Key::ArrowUp)` in your own code still fires as well. If that is a problem, check `ui.ctx().egui_wants_keyboard_input()` first: it is true while the user is typing into a widget.
+
+## Keyboard shortcuts
+
+For combinations such as Ctrl+S, use `KeyboardShortcut` rather than checking keys and modifiers yourself. It handles the difference between Ctrl and Cmd for you. See the [Keyboard shortcuts](../cookbook/keyboard-shortcuts.mdx) recipe.

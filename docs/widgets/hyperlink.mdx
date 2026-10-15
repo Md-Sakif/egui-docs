@@ -1,0 +1,32 @@
+---
+title: Hyperlink
+---
+
+# Hyperlink
+
+Links come in two kinds: a **hyperlink** opens a URL in the user's web browser, and a **link** only looks like one and lets you decide what happens.
+
+<Example name="widget_hyperlink" />
+
+## The two kinds
+
+| Call | What a click does |
+|---|---|
+| `ui.hyperlink("https://...")` | Opens the URL. The URL is also the visible text |
+| `ui.hyperlink_to("text", "https://...")` | Opens the URL, showing your own text |
+| `ui.link("text")` | Nothing by itself. Returns a response for you to check with `.clicked()` |
+
+Use `ui.link` for in-app navigation, such as switching to another page of your app.
+
+## Options
+
+With `egui::Hyperlink::from_label_and_url(text, url)` you get one more setting:
+
+| Method | What it does |
+|---|---|
+| `.open_in_new_tab(true)` | In a web app, open the page in a new browser tab instead of replacing your app |
+
+## Good to know
+
+- On the desktop, hyperlinks open in the system's default browser.
+- To show the address of a hyperlink in a tooltip when it is hovered, set `url_in_tooltip` to `true` in the [style](../concepts/styling.mdx). It is off by default.

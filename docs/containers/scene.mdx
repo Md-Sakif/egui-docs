@@ -1,0 +1,35 @@
+---
+title: Scene
+---
+
+# Scene
+
+A `Scene` is a canvas the user can pan and zoom, like a map or a diagram editor. Everything you put inside it, widgets included, moves and scales together.
+
+<Example name="container_scene" />
+
+## The basics
+
+You own the view. It is a `Rect` describing which part of the scene is visible, stored in your app:
+
+<Example name="container_scene" item="struct MyApp" />
+
+Pass it to `show`, which updates it as the user pans and zooms:
+
+<Example name="container_scene" item="egui::Scene::new()" />
+
+Starting with `Rect::ZERO` makes the scene fit all of its content the first time, which is why the text in the screenshot is enlarged to fill the box.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.zoom_range(0.1..=4.0)` | How far the user can zoom out and in |
+| `.max_inner_size([w, h])` | The largest size the content may have |
+| `.drag_pan_buttons(...)` | Which mouse buttons pan by dragging |
+
+## Good to know
+
+- To reset the view from code, set your rect back to `egui::Rect::ZERO`, or to any rectangle you want to show.
+- A scene takes all the space it is given, so wrap it in something with a size, such as a panel or a [Frame](./frame.mdx).
+- A scene has no scroll bars and no limits on panning. For ordinary scrolling content, use a [ScrollArea](./scroll-area.mdx).

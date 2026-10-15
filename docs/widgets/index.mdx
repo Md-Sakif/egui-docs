@@ -1,0 +1,58 @@
+---
+title: Widgets
+slug: /widgets
+---
+
+# Widgets
+
+A widget is one piece of UI: a button, a slider, a line of text. You add widgets to a `Ui`, and each one returns a [`Response`](../concepts/responses.mdx) that tells you what the user did with it.
+
+There are two ways to add most widgets:
+
+- **A shortcut method** on `Ui` for the common case: `ui.button("Save")`, `ui.checkbox(&mut on, "Enabled")`.
+- **The widget type itself**, with `ui.add(...)`, when you want more options: `ui.add(egui::Button::new("Save").fill(color))`.
+
+Every page in this section shows a complete program you can run.
+
+## Text
+
+<Cards>
+  <Card to="/docs/widgets/label" title="Label">Plain text, headings, monospace and colored text</Card>
+  <Card to="/docs/widgets/rich-text" title="RichText">Size, color, bold, italics and more for any text</Card>
+  <Card to="/docs/widgets/hyperlink" title="Hyperlink">Links that open a web page, or run your code</Card>
+</Cards>
+
+## Buttons and choices
+
+<Cards>
+  <Card to="/docs/widgets/button" title="Button">The thing you click</Card>
+  <Card to="/docs/widgets/checkbox" title="Checkbox">Turn one option on or off</Card>
+  <Card to="/docs/widgets/radio-button" title="RadioButton">Pick exactly one from a few options</Card>
+  <Card to="/docs/widgets/selectable-label" title="Selectable label">Tab-like choices and toggle buttons</Card>
+  <Card to="/docs/widgets/combo-box" title="ComboBox">A drop-down list</Card>
+</Cards>
+
+## Numbers and text input
+
+<Cards>
+  <Card to="/docs/widgets/slider" title="Slider">Pick a number from a range by dragging</Card>
+  <Card to="/docs/widgets/drag-value" title="DragValue">A compact number field you can drag or type into</Card>
+  <Card to="/docs/widgets/text-edit" title="TextEdit">Single-line, multi-line, password and code fields</Card>
+  <Card to="/docs/widgets/color-picker" title="Color picker">Choose a color</Card>
+</Cards>
+
+## Showing things
+
+<Cards>
+  <Card to="/docs/widgets/progress-bar" title="ProgressBar">How far along a task is</Card>
+  <Card to="/docs/widgets/spinner" title="Spinner">Something is happening, please wait</Card>
+  <Card to="/docs/widgets/separator" title="Separator">A dividing line</Card>
+  <Card to="/docs/widgets/image" title="Image">Pictures from files or made in code</Card>
+</Cards>
+
+## Working with widgets
+
+<Cards>
+  <Card to="/docs/widgets/enabled-visible" title="Disabling and hiding">Grey widgets out, or hide them without moving the rest</Card>
+  <Card to="/docs/widgets/custom-widget" title="Your own widget">Build a toggle switch from scratch</Card>
+</Cards>

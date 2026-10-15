@@ -1,0 +1,41 @@
+---
+title: Disabling and hiding
+---
+
+# Disabling and hiding widgets
+
+Sometimes a widget should be there but not usable, or not there at all for now. Here is the same form, locked and unlocked:
+
+<Screenshot name="widget_enabled_locked" />
+
+<Example name="widget_enabled" />
+
+## Disable
+
+A disabled widget is drawn faded and ignores all input.
+
+| Call | What it disables |
+|---|---|
+| `ui.add_enabled(enabled, widget)` | One widget |
+| `ui.add_enabled_ui(enabled, \|ui\| ...)` | Everything inside the closure |
+| `ui.disable()` | Everything added to this `Ui` from here on |
+
+Tell people *why* something is disabled. `.on_disabled_hover_text("...")` adds a tooltip that only appears while the widget is disabled:
+
+<Example name="widget_enabled" item="ui.add_enabled(self.unlocked" />
+
+## Hide
+
+There are two ways to hide a widget, with different effects on the layout:
+
+- **Don't add it.** Put it inside an `if`. The widget takes no space, and everything below moves up.
+- **Add it invisibly.** `ui.add_visible(visible, widget)` keeps the widget's space reserved, so the rest of the layout stays where it is.
+
+The second one is what the example uses for its thank-you message, so the last line never jumps.
+
+`ui.set_invisible()` hides everything added to the current `Ui` from that point on, in the same space-preserving way.
+
+## Good to know
+
+- Disabling a `Ui` cannot be undone further down: inside a disabled block, everything is disabled.
+- To fade something without disabling it, use `ui.set_opacity(0.5)`.

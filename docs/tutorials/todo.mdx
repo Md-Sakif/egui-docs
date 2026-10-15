@@ -1,0 +1,74 @@
+---
+title: To-do list
+---
+
+# Tutorial: a to-do list
+
+A to-do app is small, but it has everything a real app has: a list that grows and shrinks, text input, and different views of the same data. You will build it in two steps.
+
+<Screenshot name="todo_2_filter" />
+
+## Step 1: add tasks
+
+<Example name="todo_1_add" />
+
+### The state
+
+<Example name="todo_1_add" item="struct Task" />
+<Example name="todo_1_add" item="struct TodoApp" />
+
+The list of tasks is a `Vec`, and the text the user is typing is a `String`. A text field in egui does not store its own text. It edits a `String` that belongs to you, which is why `new_task` is part of the app.
+
+### The input row
+
+<Example name="todo_1_add" item="ui.horizontal" />
+
+A few things are worth a closer look:
+
+- **`TextEdit::singleline`** is the long form of `ui.text_edit_singleline`. Using the builder lets you add a hint and set the width. See [TextEdit](../widgets/text-edit.mdx).
+- **Pressing Enter.** A single-line text field gives up keyboard focus when the user presses Enter. So "it lost focus, and Enter was pressed this frame" means the user submitted the text.
+- **`response.request_focus()`** puts the cursor back into the field, so you can add several tasks without touching the mouse.
+
+### The list
+
+<Example name="todo_1_add" item="for task in" />
+
+One checkbox per task. Each checkbox edits the `done` field of its task directly. There is no "on change" handler that copies the value somewhere: the checkbox and your data are always the same thing.
+
+## Step 2: filter and delete
+
+Now add three filter buttons, a delete button per task, and a footer.
+
+<Example name="todo_2_filter" />
+
+### A filter is an enum
+
+<Example name="todo_2_filter" item="enum Filter" />
+
+<Example name="todo_2_filter" item="// Three mutually exclusive" />
+
+`selectable_value` is the tab-like cousin of a radio button. Each call says: "show as selected if `self.filter` equals this value, and set it to this value when clicked". See [Selectable label](../widgets/selectable-label.mdx).
+
+### Showing only some tasks
+
+<Example name="todo_2_filter" item="for (index, task)" />
+
+Filtering is just an `if` with a `continue`. Because the UI is rebuilt every frame, hidden tasks are simply not drawn. Nothing needs to be removed from the screen.
+
+### Deleting while looping
+
+<Example name="todo_2_filter" item="if let Some(index) = delete" />
+
+Rust does not let you remove an item from a list while you are looping over it. The usual egui pattern is the one you see here: remember *what* to delete in a variable during the loop, and do it right after.
+
+## What you learned
+
+- Text fields and checkboxes edit data that you own.
+- Lists are drawn with ordinary `for` loops, and filtered with ordinary `if`s.
+- Changes that conflict with a loop are collected first and applied afterwards.
+
+## Ideas to take it further
+
+- Keep the tasks when the app is closed: [Saving state between runs](../cookbook/persistence.mdx).
+- Put the list in a [ScrollArea](../containers/scroll-area.mdx) so it can grow past the window.
+- Let people reorder tasks with [drag and drop](../cookbook/drag-and-drop.mdx).

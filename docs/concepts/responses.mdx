@@ -1,0 +1,64 @@
+---
+title: Responses
+---
+
+# Responses: reacting to the user
+
+Every widget you add returns a `Response`. It tells you what the user just did to that widget, and it lets you attach extra behavior such as a tooltip.
+
+<Example name="concept_response" />
+
+## Asking what happened
+
+These methods return `true` only on the frame where the thing happened, so an `if` around them runs once per click.
+
+| Method | True when |
+|---|---|
+| `clicked()` | The widget was clicked with the primary mouse button, or activated with the keyboard |
+| `double_clicked()`, `triple_clicked()` | It was clicked twice or three times in quick succession |
+| `secondary_clicked()` | It was right-clicked |
+| `middle_clicked()` | It was clicked with the middle button |
+| `changed()` | The widget changed its value: a slider moved, a checkbox flipped, text was edited |
+| `hovered()` | The pointer is over the widget |
+| `has_focus()` | The widget has keyboard focus |
+| `gained_focus()`, `lost_focus()` | Keyboard focus arrived or left this frame |
+| `drag_started()`, `dragged()`, `drag_stopped()` | The stages of dragging the widget |
+| `clicked_elsewhere()` | There was a click somewhere outside the widget |
+
+`drag_delta()` returns how far the pointer moved while dragging since the last frame.
+
+:::tip `clicked` or `changed`?
+For buttons use `clicked()`. For widgets that edit a value (sliders, checkboxes, text fields, combo boxes) use `changed()`: it is also true when the value was changed with the keyboard.
+:::
+
+## Adding behavior
+
+These methods take the response and return it again, so you can chain them:
+
+| Method | What it adds |
+|---|---|
+| `on_hover_text("...")` | A text [tooltip](../containers/tooltip.mdx) |
+| `on_hover_ui(\|ui\| ...)` | A tooltip with any content |
+| `on_disabled_hover_text("...")` | A tooltip that shows only while the widget is disabled |
+| `on_hover_cursor(icon)` | A different mouse cursor over the widget |
+| `context_menu(\|ui\| ...)` | A [right-click menu](../containers/context-menu.mdx) |
+| `highlight()` | Draws the widget as if it were hovered |
+
+And two that act on the widget:
+
+| Method | What it does |
+|---|---|
+| `request_focus()` | Gives the widget keyboard focus |
+| `scroll_to_me(align)` | Scrolls the surrounding [ScrollArea](../containers/scroll-area.mdx) so the widget is visible |
+
+## Making other widgets clickable
+
+Labels and images ignore clicks unless you ask for them. `sense` changes what a widget listens for:
+
+<Example name="concept_response" item="let label" to="if ui.add(label)" />
+
+The options are `Sense::hover()`, `Sense::click()`, `Sense::drag()` and `Sense::click_and_drag()`.
+
+## Responses from containers
+
+Containers such as `ui.horizontal` return an `InnerResponse`. It has two fields: `response` is the response of the container as a whole, and `inner` is whatever your closure returned.

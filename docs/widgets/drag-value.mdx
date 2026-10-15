@@ -1,0 +1,33 @@
+---
+title: DragValue
+---
+
+# DragValue
+
+A `DragValue` is a compact number field. Drag it left or right to change the number, or click it and type. It takes far less room than a [slider](./slider.mdx), which makes it ideal for forms and property panels with many numbers.
+
+<Example name="widget_drag_value" />
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.speed(0.1)` | How much the value changes per point of mouse movement |
+| `.range(0..=100)` | The smallest and largest allowed value |
+| `.prefix("$ ")`, `.suffix(" px")` | Text before or after the number |
+| `.fixed_decimals(2)` | Always show this many decimals |
+| `.min_decimals(n)`, `.max_decimals(n)` | Limit how many decimals are shown |
+| `.clamp_existing_to_range(false)` | Leave a value alone if it starts outside the range |
+| `.update_while_editing(false)` | Only apply typed text when editing is finished |
+| `.custom_formatter(...)`, `.custom_parser(...)` | Show and read the value in your own format |
+| `.hexadecimal(...)`, `.binary(...)`, `.octal(...)` | Show integers in another base |
+
+## Angles
+
+`ui.drag_angle(&mut radians)` is a ready-made drag value for angles. Your variable holds radians, which is what math functions want, and the user sees degrees.
+
+## Good to know
+
+- Without a range, a drag value has no limits. Add `.range(...)` whenever only some values make sense.
+- The default speed suits whole numbers. For values between 0 and 1, lower it with `.speed(0.01)`.
+- Hold Shift while dragging for finer control.

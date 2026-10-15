@@ -1,0 +1,54 @@
+---
+title: Desktop
+---
+
+# Publishing a desktop app
+
+An eframe app compiles to one executable file. There is no runtime to install and no folder of assets to ship alongside it, as long as you embed your images and fonts with `include_bytes!` and `include_image!`.
+
+## Build a release
+
+```bash
+cargo build --release
+```
+
+The result is in `target/release/`, named after your package: `my-app` on Linux and macOS, `my-app.exe` on Windows. That file is your app.
+
+Always ship a release build. A debug build is many times larger and much slower.
+
+## A checklist for `main.rs`
+
+This is a good starting point for an app you intend to give to other people:
+
+<Example name="publish_desktop" shot={false} />
+
+Three things in it matter for publishing:
+
+**No console window on Windows.** The first line tells Windows that this is a graphical program. Without it, release builds open an empty terminal window next to your app. The `cfg_attr` keeps the console in debug builds, where you want to see log output. On other systems the line does nothing.
+
+**A window icon.** The icon is decoded from a PNG that is embedded in the executable. See [Window options](../getting-started/window-options.mdx).
+
+**A stable app name.** The first argument to `run_native` identifies your app to the system. [Saved state](../cookbook/persistence.mdx) is stored under this name, so choose it once.
+
+## Make the executable smaller
+
+Rust keeps debugging symbols in release builds on some platforms. Stripping them makes the file noticeably smaller and changes nothing about how the app runs:
+
+```toml title="Cargo.toml"
+[profile.release]
+strip = true
+```
+
+For the "Hello, world!" app from [Your first app](../getting-started/first-app.mdx), built on Linux, this took the executable from 26.8 MB down to 19.9 MB.
+
+## Building for each platform
+
+Build on the system you are building for: the Windows version on Windows, the macOS version on a Mac, the Linux version on Linux. Cross-compiling a GUI app is possible but takes extra setup, and most projects use a build service that offers all three systems instead.
+
+A Linux build depends on system libraries for the window system and graphics, which desktop distributions already have. It also runs on both X11 and Wayland.
+
+## Good to know
+
+- The file in `target/release/` can be copied anywhere and renamed.
+- To give users an installer, an app bundle or a package, look at tools made for that, such as `cargo-bundle` or `cargo-packager`. They wrap the same executable.
+- If your app should also run in a browser, continue with [Publishing for the web](./web.mdx).

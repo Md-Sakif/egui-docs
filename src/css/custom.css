@@ -1,0 +1,60 @@
+/* Colors borrowed from egui's own look: a calm blue accent on neutral greys. */
+:root {
+  --ifm-color-primary: #1f6fb5;
+  --ifm-color-primary-dark: #1c64a3;
+  --ifm-color-primary-darker: #1a5e9a;
+  --ifm-color-primary-darkest: #164e7f;
+  --ifm-color-primary-light: #227ac7;
+  --ifm-color-primary-lighter: #2680d0;
+  --ifm-color-primary-lightest: #4394dd;
+  --ifm-code-font-size: 92%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #5ab0f2;
+  --ifm-color-primary-dark: #3da2f0;
+  --ifm-color-primary-darker: #2f9bef;
+  --ifm-color-primary-darkest: #1180db;
+  --ifm-color-primary-light: #77bef4;
+  --ifm-color-primary-lighter: #85c5f5;
+  --ifm-color-primary-lightest: #b1daf9;
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.12);
+}
+
+/* Reference tables read better when the method column never wraps. */
+.markdown table td:first-child code {
+  white-space: nowrap;
+}
+
+/* The card grid on the gallery pages. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.gallery > a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.gallery > a:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.gallery > a strong {
+  color: var(--ifm-color-primary);
+}
+
+.gallery > a span {
+  font-size: 0.85rem;
+  color: var(--ifm-color-emphasis-700);
+}

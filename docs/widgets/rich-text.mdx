@@ -1,0 +1,43 @@
+---
+title: RichText
+---
+
+# RichText
+
+`RichText` is text with styling attached: a size, a color, bold, italics and so on. It is not a widget itself. You pass it to anything that shows text, such as a label, a button or a checkbox.
+
+<Example name="widget_rich_text" />
+
+## Options
+
+Every method returns the `RichText` again, so they can be chained in any order.
+
+| Method | What it does |
+|---|---|
+| `.size(24.0)` | Font size in points |
+| `.color(color)` | Text color |
+| `.background_color(color)` | A highlight behind the text |
+| `.strong()` | Brighter, emphasized text |
+| `.weak()` | Dimmer text |
+| `.italics()` | Slanted text |
+| `.underline()` | A line under the text |
+| `.strikethrough()` | A line through the text |
+| `.monospace()` | The fixed-width font |
+| `.code()` | Fixed-width on a tinted background |
+| `.heading()` | The heading text style |
+| `.small()` | The small text style |
+| `.text_style(style)` | Any of the app's [text styles](../concepts/styling.mdx#text-sizes) |
+| `.family(family)` | A specific font family |
+
+## Several styles in one label
+
+A `RichText` has one style for the whole string. To mix styles inside a single piece of text, as in the last line of the example, build a `LayoutJob` and append sections to it:
+
+<Example name="widget_rich_text" item="// For several styles" to="ui.label(job)" />
+
+Each call to `append` adds a section with its own `TextFormat`. The middle argument is extra space before the section.
+
+## Good to know
+
+- Colors that you set by hand stay the same in dark and light mode. Check both. See [Styling](../concepts/styling.mdx).
+- To change the size or font of *all* text, change the app's [text styles](../concepts/styling.mdx#text-sizes) instead of wrapping every string in `RichText`.

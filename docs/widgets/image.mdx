@@ -1,0 +1,75 @@
+---
+title: Image
+---
+
+# Image
+
+egui can show images that are bundled with your app, and images that you create in code.
+
+## Images from files
+
+<Example name="widget_image" />
+
+Showing a PNG or JPEG takes one extra crate and one line of setup.
+
+**1. Add the dependencies.** egui does not decode image files by itself. The `egui_extras` crate adds that, using the `image` crate:
+
+```toml title="Cargo.toml"
+[dependencies]
+eframe = "0.36.2"
+egui_extras = { version = "0.36.2", features = ["image"] }
+image = { version = "0.25", default-features = false, features = ["png"] }
+```
+
+List the formats you need in the `image` features, for example `["png", "jpeg"]`.
+
+**2. Install the loaders once**, when the app starts:
+
+<Example name="widget_image" item="fn new" />
+
+**3. Show the image.** `egui::include_image!` embeds the file in your executable, so there is nothing extra to ship:
+
+<Example name="widget_image" item="ui.image(egui::include_image!" />
+
+The path is relative to the source file that contains the macro, the same as for Rust's `include_bytes!`.
+
+:::warning Forgot step 2?
+Without `install_image_loaders`, the image does not appear and egui shows an error in its place.
+:::
+
+## Options
+
+`ui.image(source)` shows the image as large as the space allows, up to its original size. Use `egui::Image::new(source)` for more control:
+
+| Method | What it does |
+|---|---|
+| `.fit_to_exact_size(vec2)` | Fit the image into exactly this size |
+| `.max_width(w)`, `.max_height(h)`, `.max_size(vec2)` | Upper limits |
+| `.fit_to_original_size(scale)` | The image's own size, times a scale |
+| `.maintain_aspect_ratio(false)` | Allow the image to be stretched |
+| `.corner_radius(12)` | Rounded corners |
+| `.tint(color)` | Multiply the image with a color |
+| `.bg_fill(color)` | A background behind transparent parts |
+| `.rotate(angle, origin)` | Rotate the image |
+| `.sense(egui::Sense::click())` | Make the image clickable |
+| `.alt_text("...")` | A description for screen readers |
+
+:::tip Images shrink in rows
+An image tries to fit into the space it is given. Inside `ui.horizontal` that space is only one line of text high, so the image becomes tiny. Give images in a row an exact size, as the example does with `fit_to_exact_size`.
+:::
+
+## Images in buttons
+
+`egui::Button::image_and_text(image, "text")` puts an icon in front of the button text:
+
+<Example name="widget_image" item="let icon" to="let _ = ui.add(egui::Button::image_and_text" />
+
+## Textures you create in code
+
+If your pixels come from code (a generated pattern, a camera frame, a decoded video) you don't need `egui_extras`. Build a `ColorImage` and hand it to egui as a texture:
+
+<Example name="widget_image_texture" />
+
+The important part is to create the texture **once** and keep the `TextureHandle` in your app struct. Creating a texture every frame would upload it to the graphics card every frame.
+
+To change the pixels later, call `texture.set(new_image, options)` on the handle.

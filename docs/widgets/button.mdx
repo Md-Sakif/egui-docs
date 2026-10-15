@@ -1,0 +1,50 @@
+---
+title: Button
+---
+
+# Button
+
+A button does something when clicked.
+
+<Example name="widget_button" />
+
+## The basics
+
+`ui.button("text")` adds a button and returns its [response](../concepts/responses.mdx). Put it in an `if` to react to a click:
+
+<Example name="widget_button" item={'if ui.button("Click me")'} />
+
+`ui.small_button("text")` is the same with less padding, for tight spots such as table rows.
+
+## Options
+
+For more control, build the button with `egui::Button::new(...)` and add it with `ui.add`:
+
+| Method | What it does |
+|---|---|
+| `.fill(color)` | Background color |
+| `.stroke(stroke)` | Outline width and color |
+| `.corner_radius(12.0)` | How round the corners are |
+| `.min_size(vec2)` | The smallest size the button may have |
+| `.frame(false)` | No background or outline until hovered |
+| `.selected(true)` | Draw it highlighted, as "on" |
+| `.small()` | Less padding, like `ui.small_button` |
+| `.shortcut_text("Ctrl+S")` | Dimmed text on the right, as in menus |
+| `.wrap()` / `.truncate()` | What to do with text that is too long |
+| `.sense(sense)` | What interaction to react to |
+
+The text can be a [`RichText`](./rich-text.mdx), which is how the "Filled" button in the example gets white text.
+
+## Buttons with images
+
+`egui::Button::image_and_text(image, "text")` puts an icon before the text, and `egui::Button::image(image)` makes a button from an image alone. See the example on the [Image](./image.mdx) page.
+
+## Disabled buttons
+
+`ui.add_enabled(false, egui::Button::new("..."))` adds a button that is greyed out and ignores clicks. See [Disabling and hiding](./enabled-visible.mdx).
+
+## Good to know
+
+- The compiler warns if you ignore the result of `ui.button(...)`, because a button that nothing reacts to is usually a mistake. For a placeholder, write `let _ = ui.button("...");`.
+- A button can also be activated with the keyboard: Tab moves focus to it, and Space or Enter "clicks" it. `clicked()` is true in that case too.
+- For a button that stays pressed, see [Selectable label](./selectable-label.mdx).

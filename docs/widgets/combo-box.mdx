@@ -1,0 +1,47 @@
+---
+title: ComboBox
+---
+
+# ComboBox
+
+A combo box is a drop-down list: it shows the current choice, and opens a list of options when clicked.
+
+<Example name="widget_combo_box" />
+
+Opened, it looks like this:
+
+<Screenshot name="widget_combo_box_open" />
+
+## The basics
+
+A combo box has three parts: a label, the text to show while closed, and a closure that fills the list.
+
+<Example name="widget_combo_box" item="egui::ComboBox::from_label" />
+
+The list is filled with [`selectable_value`](./selectable-label.mdx) calls, one per option. Because the closure is ordinary UI code, a list can also hold separators, headings or anything else.
+
+Note that the label next to the box and the text inside it are separate. `selected_text` is whatever you want to show for the current value.
+
+## Choosing by index
+
+When your options are simply a list of strings, `show_index` saves you the enum. It edits a `usize`:
+
+<Example name="widget_combo_box" item="let fruits" to={'egui::ComboBox::from_label("Fruit")'} />
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `ComboBox::from_label("text")` | A combo box with a visible label after it |
+| `ComboBox::from_id_salt("name")` | A combo box without a label. The name is only used as its [ID](../concepts/ids.mdx) |
+| `.selected_text("...")` | The text shown in the closed box |
+| `.width(200.0)` | The width of the box |
+| `.height(300.0)` | The maximum height of the open list |
+| `.truncate()` / `.wrap()` | What to do with selected text that is too long |
+| `.close_behavior(...)` | When the list closes. By default, when an option is clicked |
+
+## Good to know
+
+- Two combo boxes with the same label in the same place clash. Give them different labels, or use `from_id_salt`. See [IDs](../concepts/ids.mdx).
+- To react to a new choice, compare the value before and after, or check `.changed()` on the response of the `selectable_value` that was clicked.
+- For a handful of options that should all stay visible, [radio buttons](./radio-button.mdx) are friendlier.

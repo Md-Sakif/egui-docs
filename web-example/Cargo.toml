@@ -1,0 +1,22 @@
+[package]
+name = "web-example"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+eframe = "0.36.2"
+log = "0.4"
+
+# Only needed when compiling for the browser:
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen-futures = "0.4"
+web-sys = "0.3"
+
+# Small and fast WebAssembly for `trunk build --release`:
+[profile.release]
+opt-level = 2
+
+# Leave out debug info to keep the target folder small:
+[profile.dev]
+debug = false

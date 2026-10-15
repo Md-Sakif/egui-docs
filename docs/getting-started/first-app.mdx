@@ -1,0 +1,69 @@
+---
+title: Your first app
+---
+
+# Your first app
+
+Let's put a window on the screen. Open `src/main.rs` in the project you made during [installation](./installation.mdx) and replace its contents with this:
+
+<Example name="hello_world" />
+
+Run it:
+
+```bash
+cargo run
+```
+
+A window titled "Hello egui" opens with a heading and a line of text. That's a complete egui app.
+
+## What the code does
+
+**`main` starts the app.** `eframe::run_native` opens a window and keeps it running until the user closes it. It takes three things:
+
+<Example name="hello_world" item="fn main" />
+
+1. A name for the app. It is used as the window title, and later as the place where saved settings are stored.
+2. Options for the window, such as its size. The defaults are fine for now. See [Window options](./window-options.mdx).
+3. A function that creates your app. It runs once, at startup.
+
+**`MyApp` is your app.** It is an ordinary struct. Right now it is empty, because this app has nothing to remember.
+
+**`ui` draws the app.** Implementing the `eframe::App` trait means writing one function, `ui`, which eframe calls every time the window needs to be drawn:
+
+<Example name="hello_world" item="impl eframe::App" />
+
+The `ui` argument is what you add widgets to. `CentralPanel` gives the window a background and a margin, and inside it we add a heading and a label. Widgets appear in the order you add them, top to bottom.
+
+## Add some state
+
+An app that never changes is not very interesting. Here is a counter:
+
+<Example name="first_app" />
+
+Three things changed:
+
+- **The struct has a field.** `count` is the app's state. It is plain Rust data that lives as long as the app does.
+- **`main` sets the window size** with a `ViewportBuilder`.
+- **The buttons change the state.** `ui.button("+")` draws a button and returns a *response*. Calling `.clicked()` on it tells you whether the user clicked it just now. If so, we change `count`, and the label below shows the new value the next time `ui` runs.
+
+`ui.horizontal` puts the widgets inside it on one row, instead of stacking them.
+
+:::tip This is the whole idea
+Draw the UI from your data, and change your data when something is clicked. You never have to update a label by hand. The next page of the docs, and everything after it, is this same idea with more widgets.
+:::
+
+## A shortcut for tiny apps
+
+For quick experiments you can skip the struct and the trait. `eframe::run_ui_native` takes a closure instead, and your state can be plain local variables:
+
+<Example name="hello_simple" shot={false} />
+
+This one is captured from the real window on a Linux desktop (cropped to the top left corner):
+
+<Screenshot name="hello_simple" single />
+
+This is handy for a ten-line tool. For anything bigger, use the struct: it gives you a place for startup code, saved state and helper methods. The rest of these docs use the struct style.
+
+## Next step
+
+Learn the commands for [running and building your app](./running.mdx), or jump into the [Calculator tutorial](../tutorials/calculator.mdx).

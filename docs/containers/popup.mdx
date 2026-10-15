@@ -1,0 +1,50 @@
+---
+title: Popup
+---
+
+# Popup
+
+A popup is a small panel that appears next to a widget, on top of everything else. Menus, combo box lists and tooltips are all popups. Use `egui::Popup` directly when you want one of your own.
+
+<Example name="container_popup" />
+
+## A menu on any button
+
+`Popup::menu` attaches a menu-style popup to a widget's [response](../concepts/responses.mdx). It opens when the widget is clicked and closes when an item is chosen:
+
+<Example name="container_popup" item={'let response = ui.button("Actions")'} to="egui::Popup::menu" />
+
+## A popup that stays open
+
+For a popup with controls in it, such as quick settings or a filter panel, the popup must not close at the first click. `from_toggle_button_response` opens and closes with the button, and the close behavior decides what else closes it:
+
+<Example name="container_popup" item={'let response = ui.button("Quick settings")'} to="egui::Popup::from_toggle_button_response" />
+
+| Close behavior | The popup closes when |
+|---|---|
+| `PopupCloseBehavior::CloseOnClick` | Anything is clicked, inside or outside. The default for menus |
+| `PopupCloseBehavior::CloseOnClickOutside` | The user clicks outside the popup |
+| `PopupCloseBehavior::IgnoreClicks` | Only when you close it from code |
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `Popup::menu(&response)` | A menu that opens on click |
+| `Popup::context_menu(&response)` | A menu that opens on right-click |
+| `Popup::from_toggle_button_response(&response)` | A plain popup that the widget toggles |
+| `Popup::from_response(&response)` | A popup attached to the widget. You control when it is open |
+| `.open(bool)` | Force it open or closed |
+| `.open_bool(&mut bool)` | Tie it to a `bool` in your app |
+| `.close_behavior(...)` | See the table above |
+| `.align(...)` | Which side of the widget it appears on |
+| `.gap(4.0)` | The distance between the widget and the popup |
+| `.width(200.0)` | The width of the popup |
+| `.at_pointer()` | Appear at the mouse pointer instead of next to the widget |
+| `.frame(frame)` | A custom [Frame](./frame.mdx) |
+
+## Good to know
+
+- A popup positions itself. If there is no room below the widget, it opens above or to the side.
+- Call `ui.close()` inside a popup to close it from code.
+- For a dialog in the middle of the screen that blocks the rest of the app, use a [Modal](./modal.mdx).

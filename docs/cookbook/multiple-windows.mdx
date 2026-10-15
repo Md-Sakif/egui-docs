@@ -1,0 +1,48 @@
+---
+title: Multiple windows
+---
+
+# Multiple windows
+
+An eframe app can open more than one window of the operating system. In egui each such window is called a **viewport**.
+
+<Example name="cookbook_multiple_windows" />
+
+:::note About this screenshot
+The screenshot comes from the automated test, which has no real desktop to open windows on. There egui falls back to drawing the second viewport as a floating window inside the first. When you run the example, "Inspector" is a real, separate window that you can move to another screen.
+:::
+
+## How it works
+
+`show_viewport_immediate` shows another window. Call it every frame for as long as that window should exist:
+
+<Example name="cookbook_multiple_windows" item="ui.ctx().show_viewport_immediate" />
+
+It takes three things:
+
+1. **An ID** for the viewport. `ViewportId::from_hash_of("inspector")` makes one from any name.
+2. **A `ViewportBuilder`** with the title and size, the same type you use for the main window. See [Window options](../getting-started/window-options.mdx).
+3. **A closure** that draws the window's content. It gets a `Ui`, just like your app's `ui` function.
+
+When you stop calling it, the window closes. That is why the example wraps it in `if self.show_inspector`.
+
+## Closing the second window
+
+When the user clicks the close button of the second window, nothing happens by itself. You are told through `close_requested()`, and you decide. The example unticks the checkbox, which stops the window from being shown:
+
+<Example name="cookbook_multiple_windows" item="if ui.input(|i| i.viewport().close_requested())" />
+
+## Immediate or deferred?
+
+| | `show_viewport_immediate` | `show_viewport_deferred` |
+|---|---|---|
+| The closure can borrow your app (`self`) | Yes | No. Shared state must be in an `Arc<Mutex<...>>` |
+| Redrawing | Both windows always redraw together | Each window redraws only when it needs to |
+| Best for | Most apps. Simple | Heavy windows that should not slow each other down |
+
+Start with immediate viewports. Move to deferred ones only if you measure a problem.
+
+## Good to know
+
+- A viewport's closure is told how it is being shown. The second argument is `ViewportClass::EmbeddedWindow` when egui had to embed it instead of opening a real window, as happens on the web.
+- A window *inside* your app is a different thing, and simpler: see [Window](../containers/window.mdx).

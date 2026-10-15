@@ -1,0 +1,88 @@
+---
+title: How these docs are tested
+---
+
+# How these docs are tested
+
+A promise is made on the first page: every example on this site is real, and it works. This page explains how that promise is kept, and how you can check it yourself.
+
+## One source of truth
+
+The Rust code you see on these pages is never typed into the page. Each example is a complete program in its own file:
+
+```text
+examples/
+  src/bin/
+    first_app.rs
+    widget_button.rs
+    cookbook_tabs.rs
+    ...
+  tests/
+    screenshots.rs
+```
+
+A page shows an example by naming it. When the site is built, the code is read straight out of the `.rs` file. Even the short excerpts in the middle of a page are cut out of those same files at build time.
+
+So the code in the docs cannot drift away from the code that is tested. They are the same bytes.
+
+## What the tests do
+
+`examples/tests/screenshots.rs` pulls in the example files and, for each one:
+
+1. **Compiles it**, with the same compiler settings you would use. A typo or an outdated function name fails the build.
+2. **Runs it** without a window, using the [`egui_kittest`](https://crates.io/crates/egui_kittest) testing library.
+3. **Uses it** the way a person would. The test finds widgets by their text and clicks, types and drags. Then it checks that the app did the right thing.
+4. **Takes the screenshots** you see in these docs, once in the light theme and once in the dark theme.
+
+Some of the things the tests check:
+
+- The [calculator](./tutorials/calculator.mdx) is driven through its real buttons: `12 + 3 =` must show `15`, `0.1 + 0.2 =` must show `0.3`, and dividing by zero must show `Error`.
+- The [to-do list](./tutorials/todo.mdx) gets tasks typed into it, ticks one, filters, and deletes.
+- The [modal](./containers/modal.mdx) must close on Cancel and on Escape, and must only delete on "Delete".
+- The [drag and drop](./cookbook/drag-and-drop.mdx) recipe really drags a task from one list to the other.
+- The [background thread](./cookbook/background-thread.mdx) recipe must report progress bit by bit and then finish.
+- The [confirm before exit](./cookbook/confirm-exit.mdx) recipe must cancel a close request, and let the second one through.
+
+Two of the 75 examples cannot be driven this way, because of how they are written: `hello_simple` keeps its state in local variables, and `publish_desktop` starts with a line that is only allowed at the top of a program. Those two are compiled with the rest and were started by hand instead.
+
+## What is tested by hand
+
+A headless test cannot open a real window, so a few things were also checked on a real Linux desktop while writing these docs:
+
+- A selection of examples was started as real programs, to confirm that they open a window with the right title and size.
+- The [persistence](./cookbook/persistence.mdx) example was started and closed twice, to confirm that the saved state really survives a restart.
+- The steps on the [Installation](./getting-started/installation.mdx) page were followed in an empty folder.
+- The [web example](./publishing/web.mdx) was built with Trunk, opened in a headless Chromium browser and clicked.
+
+## What is not tested
+
+- **Other platforms.** Everything was run on Linux. Advice about Windows and macOS comes from how Rust and eframe work in general.
+- **The [companion crates](./companion-crates.mdx)**, apart from the image loaders in `egui_extras`.
+- **The tables of options.** They were written by reading the source code of egui 0.36.2, and only the options that an example actually uses are exercised.
+
+## Run the tests yourself
+
+```bash
+cd examples
+cargo test --test screenshots
+```
+
+This compiles every example, runs every test and writes fresh screenshots to `static/img/examples/`. The first run takes a while, and the build folder grows to several gigabytes, because each of the 75 examples is a complete program.
+
+(A plain `cargo test` works too, but it also builds an empty unit-test program for every example, which doubles the build time and disk space for nothing.)
+
+To run one example and try it yourself:
+
+```bash
+cd examples
+cargo run --bin widget_button
+```
+
+## When egui is updated
+
+egui changes between releases. To move these docs to a newer version:
+
+1. Raise the version numbers in `examples/Cargo.toml`.
+2. Run `cargo test --test screenshots` in `examples`. The compiler and the tests will point at every example that needs to change.
+3. Fix the examples. The pages pick up the new code by themselves.
+4. Re-read the option tables on the pages you touched.

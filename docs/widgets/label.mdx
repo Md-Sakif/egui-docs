@@ -1,0 +1,45 @@
+---
+title: Label
+---
+
+# Label
+
+A label shows text that the user reads but does not edit. It is the widget you will use most.
+
+<Example name="widget_label" />
+
+## Shortcuts
+
+Each of these adds a label with a ready-made style:
+
+| Call | Looks like |
+|---|---|
+| `ui.label("...")` | Normal text |
+| `ui.heading("...")` | A large title |
+| `ui.strong("...")` | Brighter, emphasized text |
+| `ui.weak("...")` | Dimmer, less important text |
+| `ui.small("...")` | Small print |
+| `ui.monospace("...")` | Fixed-width text |
+| `ui.code("...")` | Fixed-width text on a tinted background |
+| `ui.colored_label(color, "...")` | Text in a color you choose |
+
+For any other combination of size, color and style, pass a [`RichText`](./rich-text.mdx) to `ui.label`.
+
+## Options
+
+Build the label yourself with `egui::Label::new(...)` to change how it behaves, then add it with `ui.add`:
+
+| Method | What it does |
+|---|---|
+| `.wrap()` | Break long text onto new lines (the default in most places) |
+| `.truncate()` | Keep it on one line and end with "…" if it does not fit |
+| `.extend()` | Keep it on one line and let it grow past the available width |
+| `.selectable(false)` | Don't let the user select and copy the text |
+| `.sense(egui::Sense::click())` | Make the label react to clicks. See [Responses](../concepts/responses.mdx) |
+| `.halign(egui::Align::Center)` | Align the lines of a wrapped label |
+
+## Good to know
+
+- Text in labels can be selected with the mouse and copied, like text on a web page.
+- A truncated label shows its full text in a tooltip when hovered.
+- egui's built-in fonts cover Latin text and a set of symbols and emoji, but not every character. One that is missing is drawn as an empty box. To show other scripts, [add a font](../cookbook/custom-font.mdx) that contains them.

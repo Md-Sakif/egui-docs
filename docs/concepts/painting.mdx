@@ -1,0 +1,52 @@
+---
+title: Custom painting
+---
+
+# Custom painting
+
+When no widget draws what you need (a chart, a gauge, a game board) you can paint shapes yourself. You reserve some space, get a `Painter` for it, and draw.
+
+<Example name="concept_painting" />
+
+## Step by step
+
+**Reserve the space.** `allocate_painter` takes the size you want and what interaction you care about. It returns a `Response` for the area and a `Painter` that cannot draw outside it:
+
+<Example name="concept_painting" item="let (response, painter)" />
+
+**Find out where you are.** `response.rect` is the rectangle you were given. Its coordinates are positions in the window, not relative to your area, so always draw relative to `rect`: `rect.center()`, `rect.left_top()`, `rect.shrink(10.0)` and so on.
+
+**Draw.** Shapes are painted in the order you add them, so later shapes cover earlier ones.
+
+## What a painter can draw
+
+| Method | Draws |
+|---|---|
+| `line_segment([a, b], stroke)` | A straight line between two points |
+| `line(points, stroke)` | A line through many points |
+| `hline(x_range, y, stroke)`, `vline(x, y_range, stroke)` | A horizontal or vertical line |
+| `circle_filled(center, radius, color)` | A filled circle |
+| `circle_stroke(center, radius, stroke)` | The outline of a circle |
+| `rect_filled(rect, corner_radius, color)` | A filled rectangle, optionally rounded |
+| `rect_stroke(rect, corner_radius, stroke, kind)` | The outline of a rectangle |
+| `arrow(origin, vector, stroke)` | An arrow |
+| `text(pos, anchor, text, font, color)` | Text, anchored at a point |
+| `image(texture_id, rect, uv, tint)` | A [texture](../widgets/image.mdx#textures-you-create-in-code) |
+
+A `Stroke` is a line width and a color: `egui::Stroke::new(2.0, egui::Color32::WHITE)`.
+
+## Reacting to the mouse
+
+The `Response` from `allocate_painter` works like any other. The example follows the pointer with a circle:
+
+<Example name="concept_painting" item="if let Some(pos)" />
+
+Pass `Sense::click()` or `Sense::drag()` instead of `Sense::hover()` to find out about clicks and drags too. `response.interact_pointer_pos()` tells you where they happened.
+
+## Painting on top of widgets
+
+Every `Ui` has a painter of its own, available as `ui.painter()`. Use it to draw into space that you allocated with `ui.allocate_exact_size`, which is how custom widgets are built. See [Writing your own widget](../widgets/custom-widget.mdx).
+
+:::tip Charts
+For plots with axes, zooming and legends, don't start from scratch. The `egui_plot` crate does it well. See [Companion crates](../companion-crates.mdx).
+:::

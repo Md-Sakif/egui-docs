@@ -1,0 +1,41 @@
+---
+title: Slider
+---
+
+# Slider
+
+A slider picks a number from a range by dragging a handle. Next to it is a small number box, where the value can also be typed.
+
+<Example name="widget_slider" />
+
+## The basics
+
+`egui::Slider::new(&mut value, range)` works with any number type. The type of your variable decides whether the slider moves in whole steps or smoothly:
+
+- `Slider::new(&mut self.volume, 0..=100)` with an integer gives whole numbers.
+- `Slider::new(&mut self.opacity, 0.0..=1.0)` with a float gives decimals.
+
+Use `.changed()` on the response to react while the user drags, or `.drag_stopped()` to react once when they let go.
+
+## Options
+
+| Method | What it does |
+|---|---|
+| `.text("Volume")` | A label after the slider |
+| `.prefix("$")`, `.suffix(" px")` | Text before or after the number |
+| `.step_by(0.5)` | Snap to multiples of this value |
+| `.logarithmic(true)` | A logarithmic scale, for ranges like 20 to 20 000 |
+| `.show_value(false)` | Hide the number box |
+| `.trailing_fill(true)` | Color the track up to the handle |
+| `.vertical()` | A vertical slider |
+| `.fixed_decimals(2)` | Always show this many decimals |
+| `.min_decimals(n)`, `.max_decimals(n)` | Limit how many decimals are shown |
+| `.integer()` | Whole numbers only, even for a float variable |
+| `.clamping(mode)` | Whether typed values may go outside the range |
+| `.custom_formatter(...)`, `.custom_parser(...)` | Show and read the value in your own format, such as a time |
+| `.hexadecimal(...)`, `.binary(...)`, `.octal(...)` | Show integers in another base |
+
+## Good to know
+
+- The width of all sliders is set by `spacing.slider_width` in the [style](../concepts/styling.mdx).
+- When space is tight, a [DragValue](./drag-value.mdx) does the same job in the size of a small text field.

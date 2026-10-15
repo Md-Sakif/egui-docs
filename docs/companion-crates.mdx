@@ -1,0 +1,80 @@
+---
+title: Companion crates
+---
+
+# Companion crates
+
+egui keeps its core small. A lively ecosystem of crates adds the bigger pieces. This page is a map of the ones people reach for most.
+
+:::warning Not covered by these docs' tests
+Unlike the rest of this site, the crates on this page are **not** exercised by the example tests, apart from the image loading in `egui_extras`. Use each crate's own documentation for code, and treat this page as a list of names to look up.
+:::
+
+:::tip Match the versions
+Every one of these crates is built for a specific version of egui, and egui releases often include breaking changes. Before adding a crate, check that it has a release for the egui version you use. A mismatch shows up as confusing errors such as "expected `egui::Ui`, found `egui::Ui`".
+:::
+
+## From the egui project
+
+| Crate | What it adds |
+|---|---|
+| [`eframe`](https://crates.io/crates/eframe) | The framework these docs use to run egui on desktop and web |
+| [`egui_extras`](https://crates.io/crates/egui_extras) | Image loaders (used on the [Image](./widgets/image.mdx) page), `TableBuilder` for big tables, a date picker, syntax highlighting |
+| [`egui_plot`](https://crates.io/crates/egui_plot) | 2D plots: lines, bars, points, with pan and zoom |
+| [`egui_kittest`](https://crates.io/crates/egui_kittest) | UI testing and screenshots. It is what [tests these docs](./how-these-docs-are-tested.mdx) |
+
+## Layout and docking
+
+| Crate | What it adds |
+|---|---|
+| [`egui_dock`](https://crates.io/crates/egui_dock) | Tabs that can be dragged, split and docked, like in an IDE |
+| [`egui_tiles`](https://crates.io/crates/egui_tiles) | A tiling layout engine for dockable panes |
+| [`egui_taffy`](https://crates.io/crates/egui_taffy) | Flexbox and CSS grid layout |
+| [`egui_flex`](https://crates.io/crates/egui_flex) | A lighter flexbox layout |
+
+## Data and editors
+
+| Crate | What it adds |
+|---|---|
+| [`egui_table`](https://crates.io/crates/egui_table) | Large tables with sticky headers and columns |
+| [`egui_commonmark`](https://crates.io/crates/egui_commonmark) | Render Markdown |
+| [`egui_code_editor`](https://crates.io/crates/egui_code_editor) | A code editor with highlighting and line numbers |
+| [`egui_json_tree`](https://crates.io/crates/egui_json_tree) | A collapsible JSON viewer |
+| [`egui_ltreeview`](https://crates.io/crates/egui_ltreeview) | A tree view with selection and drag and drop |
+
+## Interaction
+
+| Crate | What it adds |
+|---|---|
+| [`rfd`](https://crates.io/crates/rfd) | The operating system's own "Open" and "Save" file dialogs |
+| [`egui-file-dialog`](https://crates.io/crates/egui-file-dialog) | A file dialog drawn with egui |
+| [`egui-notify`](https://crates.io/crates/egui-notify) | Toast notifications |
+| [`egui_dnd`](https://crates.io/crates/egui_dnd) | Sortable lists with animated drag and drop |
+
+## Graphs, maps and 3D
+
+| Crate | What it adds |
+|---|---|
+| [`egui-snarl`](https://crates.io/crates/egui-snarl) | A node graph editor |
+| [`egui_graphs`](https://crates.io/crates/egui_graphs) | Interactive graph visualization |
+| [`walkers`](https://crates.io/crates/walkers) | A slippy map widget |
+
+## Looks
+
+| Crate | What it adds |
+|---|---|
+| [`egui-phosphor`](https://crates.io/crates/egui-phosphor) | The Phosphor icon set as a font |
+| [`catppuccin-egui`](https://crates.io/crates/catppuccin-egui) | Ready-made color themes |
+
+## Other ways to run egui
+
+eframe is the usual way to run an egui app, but egui itself only needs something to feed it input and draw its output. That is why it also runs inside game engines:
+
+| Crate | What it adds |
+|---|---|
+| [`bevy_egui`](https://crates.io/crates/bevy_egui) | egui inside the Bevy game engine |
+| [`egui-wgpu`](https://crates.io/crates/egui-wgpu), [`egui-winit`](https://crates.io/crates/egui-winit), [`egui_glow`](https://crates.io/crates/egui_glow) | The building blocks eframe is made of, for wiring egui into your own renderer |
+
+## Finding more
+
+Search [crates.io for "egui"](https://crates.io/search?q=egui), or browse the list of integrations and third-party crates in the [egui README](https://github.com/emilk/egui#integrations).

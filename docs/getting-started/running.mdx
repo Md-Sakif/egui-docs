@@ -1,0 +1,57 @@
+---
+title: Running the app
+---
+
+# Running the app
+
+## Run while developing
+
+```bash
+cargo run
+```
+
+This compiles your app in debug mode and starts it. Debug builds compile quickly and include checks that help you find bugs, but they run slower than release builds.
+
+## Run at full speed
+
+```bash
+cargo run --release
+```
+
+Release builds take longer to compile and run much faster. Use them when you want to see how the app really performs, and when you give the app to someone else. The executable ends up in `target/release/`.
+
+## Make debug builds smoother
+
+In a debug build, egui itself is also compiled without optimizations, which can make a busy UI feel sluggish. You can ask Cargo to optimize your dependencies while keeping your own code quick to compile. Add this to `Cargo.toml`:
+
+```toml title="Cargo.toml"
+# Optimize all dependencies, even in debug builds
+[profile.dev.package."*"]
+opt-level = 2
+```
+
+The dependencies are compiled once with these settings, so it costs you one slower build.
+
+## Try the examples from these docs
+
+Every example on this site is a program in the `examples` folder. To run one, use the name shown under its code block:
+
+```bash
+cd examples
+cargo run --bin first_app
+```
+
+To run all the tests that check the examples and take the screenshots:
+
+```bash
+cd examples
+cargo test --test screenshots
+```
+
+## See errors and logs
+
+`eframe::run_native` returns an `eframe::Result`. Returning it from `main`, as all the examples here do, means that a startup problem (for example, no usable graphics driver) is printed to the terminal instead of being silently ignored.
+
+## Next step
+
+Change the title, size and icon of the window in [Window options](./window-options.mdx).

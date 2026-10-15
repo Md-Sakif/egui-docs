@@ -1,0 +1,46 @@
+---
+title: Menus
+---
+
+# Menus
+
+A menu bar is a row of menu buttons, usually along the top of the window. Each one opens a drop-down menu.
+
+<Example name="container_menu" shot="container_menu_open" />
+
+## The basics
+
+Three pieces fit together:
+
+1. **A top [panel](./panel.mdx)** to hold the bar.
+2. **`egui::MenuBar::new().ui(ui, ...)`**, which lays its content out as a menu bar.
+3. **`ui.menu_button("File", ...)`** for each menu. The closure is the content of the drop-down.
+
+Inside a menu you add ordinary widgets. Buttons are the menu items:
+
+<Example name="container_menu" item={'if ui.button("New")'} />
+
+## Sub-menus
+
+A `menu_button` inside a menu becomes a sub-menu that opens to the side:
+
+<Example name="container_menu" item={'ui.menu_button("Export"'} />
+
+## Closing
+
+Clicking a button in a menu closes the menu. Other widgets, such as the checkbox in the example's View menu, do the same by default.
+
+To close a menu from code, call `ui.close()` inside it.
+
+To keep a menu open while the user interacts with it, give the menu button a different close behavior. See `MenuConfig` and `PopupCloseBehavior` in the [API reference](https://docs.rs/egui).
+
+## Shortcuts in menus
+
+`egui::Button::new("Save").shortcut_text("Ctrl+S")` shows a shortcut at the right edge of a menu item. This only displays the text. To make the key combination actually work, and to show it the right way on each platform, see [Keyboard shortcuts](../cookbook/keyboard-shortcuts.mdx).
+
+## Good to know
+
+- `ui.separator()` groups items with a line.
+- `ui.menu_button` also works outside a menu bar: anywhere you put it, you get a button that opens a menu.
+- "Quit" in the example sends `ViewportCommand::Close`, which closes the window. See [Window options](../getting-started/window-options.mdx).
+- For a menu on right-click, see [Context menu](./context-menu.mdx).

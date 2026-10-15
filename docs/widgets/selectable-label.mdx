@@ -1,0 +1,26 @@
+---
+title: Selectable label
+---
+
+# Selectable label
+
+A selectable label is a piece of text that is highlighted when "on". It has no box or circle, which makes it the natural building block for tabs, toolbars and lists where one item is selected.
+
+<Example name="widget_selectable" />
+
+## Three variants
+
+| Call | Use it for |
+|---|---|
+| `ui.selectable_value(&mut current, value, "text")` | Picking one of several values. Highlighted while `current == value`, and sets `current = value` on click |
+| `ui.toggle_value(&mut on, "text")` | A button that stays pressed. Flips a `bool` on click |
+| `ui.selectable_label(selected, "text")` | Full control. Only draws and reports clicks, like `ui.radio` |
+
+`selectable_value` behaves exactly like [`radio_value`](./radio-button.mdx) with a different look.
+
+## Common uses
+
+- **Tabs:** a row of `selectable_value` calls, then a `match` on the value. See the [Tabs](../cookbook/tabs.mdx) recipe.
+- **A list with a selected row:** one `selectable_label` per row in a [ScrollArea](../containers/scroll-area.mdx).
+- **Options in a [ComboBox](./combo-box.mdx):** the drop-down list is filled with `selectable_value` calls.
+- **Toolbar toggles** such as Bold and Italic: `toggle_value`.

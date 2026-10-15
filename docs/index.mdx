@@ -1,0 +1,61 @@
+---
+slug: /
+title: Introduction
+sidebar_position: 1
+---
+
+# Introduction
+
+**egui** (pronounced "e-gooey") is a GUI library for Rust that is simple, fast and easy to get started with.
+**eframe** is its companion framework: it opens a window, runs the event loop and draws your egui app, on the desktop and in the browser.
+
+With the two of them you write your whole app in plain Rust. There is no HTML, no CSS, no markup language and no macros to learn.
+
+## What does it look like?
+
+Here is a complete counter app. It is one file, and this is all of it:
+
+<Example name="first_app" />
+
+Read the `ui` function from top to bottom and you can see the whole app: a heading, then a row with a button, a number and another button. The line that draws a button is also the line that reacts to it:
+
+<Example name="first_app" item={'if ui.button("+")'} />
+
+There are no callbacks to register and no widgets to keep in sync with your data. The count lives in an ordinary struct field, and the UI is redrawn from it every frame. This style is called [immediate mode](./concepts/immediate-mode.mdx), and it is the reason egui code stays short.
+
+## egui and eframe: who does what?
+
+| | What it is | You use it for |
+|---|---|---|
+| **egui** | The GUI library | Buttons, text, sliders, layouts, windows, styling |
+| **eframe** | The app framework | Opening the native window (or web canvas), handling input, saving state |
+
+You will almost always use them together. `eframe` re-exports `egui`, so a single dependency is enough:
+
+```toml title="Cargo.toml"
+[dependencies]
+eframe = "0.36.2"
+```
+
+## What you can build
+
+- **Desktop apps** for Windows, macOS and Linux, compiled to a single executable.
+- **Web apps** from the same code, compiled to WebAssembly. See [Publishing for the web](./publishing/web.mdx).
+- **Tools and editors**: egui is especially good at settings panels, dashboards, inspectors and anything else with lots of controls.
+
+## Every example on this site is real
+
+Each code block that shows Rust is loaded straight from a file in the `examples` folder that ships with these docs. Each of those files is a complete program which is compiled, started and clicked through by an automated test. The screenshots are taken by the same tests.
+
+So if you copy an example into your `src/main.rs`, it works. [Read how the testing works](./how-these-docs-are-tested.mdx).
+
+:::info Version
+These docs are written for **egui and eframe 0.36**, which need **Rust 1.95 or newer**. egui changes between releases, so if you use a different version, some names may differ.
+:::
+
+## Where to next?
+
+- **New here?** Start with [Installation](./getting-started/installation.mdx) and build [your first app](./getting-started/first-app.mdx).
+- **Learn by building:** follow the [Calculator tutorial](./tutorials/calculator.mdx).
+- **Looking for a widget?** Browse the [Widgets](./widgets/index.mdx) and [Containers](./containers/index.mdx) galleries.
+- **Need a quick answer?** The [Cookbook](./cookbook/index.mdx) has short recipes for common tasks.

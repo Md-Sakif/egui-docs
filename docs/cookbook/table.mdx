@@ -1,0 +1,29 @@
+---
+title: A simple table
+---
+
+# A simple table
+
+For a modest amount of tabular data, a striped [Grid](../containers/grid.mdx) inside a [ScrollArea](../containers/scroll-area.mdx) makes a perfectly good table.
+
+<Example name="cookbook_table" />
+
+## How it works
+
+**The header is just the first row.** `ui.strong` makes it stand out:
+
+<Example name="cookbook_table" item="// Header row" to="ui.end_row()" />
+
+**The rows come from a loop.** One `ui.label` per cell, and `ui.end_row()` after each record:
+
+<Example name="cookbook_table" item="for planet in rows" />
+
+**Sorting happens on your data, not in the table.** The example builds a list of references to the rows and sorts that list when the checkbox is ticked. The grid simply shows the list in the order it is given:
+
+<Example name="cookbook_table" item="let mut rows" to="if self.sort_by_moons" />
+
+## When to reach for something bigger
+
+A grid lays out every row every frame, and its header scrolls away with the content. That is fine for dozens or a few hundred rows.
+
+For thousands of rows, a header that stays in place, or columns the user can resize, use `TableBuilder` from the `egui_extras` crate. See [Companion crates](../companion-crates.mdx).

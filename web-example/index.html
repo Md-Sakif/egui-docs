@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web example</title>
+
+    <!-- Trunk compiles the Rust crate in this folder to WebAssembly and loads it here. -->
+    <link data-trunk rel="rust" />
+
+    <style>
+      /* Let the canvas fill the whole page. */
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- The id must match the one in src/main.rs -->
+    <canvas id="the_canvas_id"></canvas>
+  </body>
+</html>
